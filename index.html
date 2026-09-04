@@ -585,6 +585,25 @@ document.getElementById('lienMail').addEventListener('click',function(e){
   e.preventDefault();
   var v=function(id){return document.getElementById(id).value.trim();};
   var sujet='Demande de devis — '+v('type')+' — '+(v('nom')||'nouveau contact');
+  var corpsComplet='À : SLconcept-btp@outlook.com\nObjet : '+sujet+'\n\n'+texteDemande();
+
+  function afficherInstructions(copieReussie){
+    document.getElementById('note').innerHTML = copieReussie
+      ? 'Message copié dans le presse-papier ! Ouvrez votre application mail, collez le message, et envoyez-le à <strong>SLconcept-btp@outlook.com</strong>.'
+      : 'Envoyez votre demande à <strong>SLconcept-btp@outlook.com</strong> :<br><br>'+corpsComplet.replace(/\n/g,'<br>');
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(corpsComplet).then(function(){
+      afficherInstructions(true);
+    }).catch(function(){
+      afficherInstructions(false);
+    });
+  } else {
+    afficherInstructions(false);
+  }
+
+  // tente aussi mailto: au cas où une messagerie serait configurée
   window.location.href='mailto:SLconcept-btp@outlook.com?subject='+encodeURIComponent(sujet)+'&body='+encodeURIComponent(texteDemande());
 });
 </script>
