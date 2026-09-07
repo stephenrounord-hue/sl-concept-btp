@@ -321,6 +321,11 @@ footer a:hover{color:var(--lime)}
           <option value="bungalow">Bungalow / studio annexe</option>
           <option value="renovation">Rénovation second œuvre</option>
           <option value="surelevation">Surélévation de maison</option>
+          <option value="terrassement">Terrassement / plateforme</option>
+          <option value="chemin">Chemin d'accès carrossable</option>
+          <option value="reparation_ba">Réparation béton armé</option>
+          <option value="portail">Portail (battant ou motorisé)</option>
+          <option value="piscine_coque">Piscine coque polyester</option>
         </select>
       </div>
       <div class="champ">
@@ -328,14 +333,26 @@ footer a:hover{color:var(--lime)}
         <input type="range" id="qte" min="5" max="150" value="30" step="1">
       </div>
       <div class="champ">
+        <label for="finition">Niveau de finition</label>
+        <select id="finition">
+          <option value="0.88">Économique</option>
+          <option value="1" selected>Standard</option>
+          <option value="1.25">Premium</option>
+        </select>
+      </div>
+      <div class="champ">
         <label class="opt"><input type="checkbox" id="acces"> Accès difficile (pente, ruelle étroite, pas de camion)</label>
         <label class="opt"><input type="checkbox" id="demolition"> Dépose ou démolition de l'existant</label>
+        <label class="opt"><input type="checkbox" id="pente"> Terrain en pente ou dénivelé important</label>
+        <label class="opt"><input type="checkbox" id="urgent"> Démarrage rapide souhaité (sous 15 jours)</label>
+        <label class="opt"><input type="checkbox" id="littoral"> Zone littorale (traitement anticorrosion renforcé)</label>
+        <label class="opt"><input type="checkbox" id="hauteur"> Travaux en hauteur (étage, toiture)</label>
       </div>
       <div class="resultat">
         <div class="lbl">Estimation indicative, TTC (TVA 8,5 %)</div>
         <div class="montant" id="montant">— <span>€</span></div>
         <ul class="detail-postes" id="postes"></ul>
-        <p class="avert">Estimation hors terrassement lourd et hors raccordements.</p>
+        <p class="avert">Estimation hors terrassement lourd et hors raccordements eau/électricité. Le niveau de finition fait varier le montant de ±12 à 25 % selon les matériaux choisis.</p>
         <button class="btn btn-lime btn-plein" id="envoyerEstim" type="button">Recevoir ce chiffrage détaillé</button>
       </div>
     </div>
@@ -526,17 +543,28 @@ var BAREME={
  maison:{nom:"Maison individuelle — gros œuvre",unite:"m²",min:40,max:250,def:90,bas:750,haut:1100,postes:["Fondations et dallage","Élévation, chaînages, planchers","Charpente et couverture"]},
  bungalow:{nom:"Bungalow / studio annexe",unite:"m²",min:15,max:80,def:30,bas:950,haut:1350,postes:["Fondations adaptées petite emprise","Structure et couverture","Second œuvre de base"]},
  renovation:{nom:"Rénovation second œuvre",unite:"m²",min:15,max:150,def:50,bas:280,haut:480,postes:["Dépose et préparation des supports","Cloisons, peinture, sols","Finitions salle d'eau / cuisine"]},
- surelevation:{nom:"Surélévation de maison",unite:"m²",min:20,max:150,def:50,bas:900,haut:1300,postes:["Renforcement de structure existante","Élévation et chaînages","Charpente et couverture"]}
+ surelevation:{nom:"Surélévation de maison",unite:"m²",min:20,max:150,def:50,bas:900,haut:1300,postes:["Renforcement de structure existante","Élévation et chaînages","Charpente et couverture"]},
+ terrassement:{nom:"Terrassement / plateforme",unite:"m²",min:20,max:500,def:100,bas:55,haut:95,postes:["Décapage et décaissement","Nivellement et compactage","Évacuation des déblais"]},
+ chemin:{nom:"Chemin d'accès carrossable",unite:"ml",min:10,max:200,def:40,bas:190,haut:280,postes:["Terrassement et forme","Empierrement ou dalle béton","Finition roulante"]},
+ reparation_ba:{nom:"Réparation béton armé",unite:"m²",min:5,max:100,def:15,bas:190,haut:340,postes:["Purge et passivation des aciers","Reprofilage mortier R4","Protection anticarbonatation"]},
+ portail:{nom:"Portail battant ou motorisé",unite:"ml",min:3,max:8,def:4,bas:450,haut:1100,postes:["Structure aluminium ou fer","Poteaux et scellement","Motorisation en option"]},
+ piscine_coque:{nom:"Piscine coque polyester",unite:"m²",min:8,max:40,def:16,bas:700,haut:980,postes:["Terrassement et pose de la coque","Raccordements et remblai","Margelles et finitions"]}
 };
 var elProjet=document.getElementById('projet'),elQte=document.getElementById('qte'),
     elVal=document.getElementById('valQte'),elLbl=document.getElementById('lblQte'),
     elMontant=document.getElementById('montant'),elPostes=document.getElementById('postes'),
-    elAcces=document.getElementById('acces'),elDemo=document.getElementById('demolition');
+    elAcces=document.getElementById('acces'),elDemo=document.getElementById('demolition'),
+    elFinition=document.getElementById('finition'),elPente=document.getElementById('pente'),
+    elUrgent=document.getElementById('urgent'),elLittoral=document.getElementById('littoral'),
+    elHauteur=document.getElementById('hauteur');
 function euro(n){return Math.round(n/50)*50;}
 function fmt(n){return n.toLocaleString('fr-FR');}
 function calculer(){
   var b=BAREME[elProjet.value],q=parseFloat(elQte.value),k=1;
   if(elAcces.checked)k*=1.15; if(elDemo.checked)k*=1.08;
+  if(elPente.checked)k*=1.12; if(elUrgent.checked)k*=1.10;
+  if(elLittoral.checked)k*=1.10; if(elHauteur.checked)k*=1.10;
+  k*=parseFloat(elFinition.value);
   elMontant.innerHTML=fmt(euro(b.bas*q*k))+' – '+fmt(euro(b.haut*q*k))+' <span>€</span>';
   elVal.textContent=q+' '+b.unite;
   elLbl.textContent=(b.unite==='ml')?'Longueur':'Surface';
@@ -544,21 +572,26 @@ function calculer(){
 }
 function changerProjet(){var b=BAREME[elProjet.value];elQte.min=b.min;elQte.max=b.max;elQte.value=b.def;calculer();}
 elProjet.addEventListener('change',changerProjet);
-[elQte,elAcces,elDemo].forEach(function(e){e.addEventListener('input',calculer);});
+[elQte,elAcces,elDemo,elFinition,elPente,elUrgent,elLittoral,elHauteur].forEach(function(e){e.addEventListener('input',calculer);e.addEventListener('change',calculer);});
 changerProjet();
 
 var CORRESPONDANCE={
-  rigide:"Clôture", muret:"Clôture", muretseul:"Clôture", grillage:"Clôture",
-  piscine:"Piscine", horssol:"Piscine",
+  rigide:"Clôture", muret:"Clôture", muretseul:"Clôture", grillage:"Clôture", portail:"Clôture",
+  piscine:"Piscine", horssol:"Piscine", piscine_coque:"Piscine",
   dalle:"Chemin d'accès / terrassement", carrelage:"Rénovation tous corps d'état",
   maison:"Maison individuelle / bungalow", bungalow:"Maison individuelle / bungalow",
-  renovation:"Rénovation tous corps d'état", surelevation:"Maison individuelle / bungalow"
+  renovation:"Rénovation tous corps d'état", surelevation:"Maison individuelle / bungalow",
+  terrassement:"Chemin d'accès / terrassement", chemin:"Chemin d'accès / terrassement",
+  reparation_ba:"Réparation béton armé"
 };
 document.getElementById('envoyerEstim').addEventListener('click',function(){
   var b=BAREME[elProjet.value],t=document.getElementById('type'),cible=CORRESPONDANCE[elProjet.value];
   for(var i=0;i<t.options.length;i++){ if(t.options[i].text===cible) t.selectedIndex=i; }
-  document.getElementById('msg').value=b.nom+' — '+elQte.value+' '+b.unite+
+  var finitionTxt=elFinition.options[elFinition.selectedIndex].text;
+  document.getElementById('msg').value=b.nom+' — '+elQte.value+' '+b.unite+' — finition '+finitionTxt+
     (elAcces.checked?'\nAccès difficile':'')+(elDemo.checked?'\nDépose de l\'existant à prévoir':'')+
+    (elPente.checked?'\nTerrain en pente':'')+(elUrgent.checked?'\nDémarrage rapide souhaité':'')+
+    (elLittoral.checked?'\nZone littorale':'')+(elHauteur.checked?'\nTravaux en hauteur':'')+
     '\nEstimation obtenue sur le site : '+elMontant.textContent.replace(/\s+/g,' ').trim();
   document.getElementById('devis').scrollIntoView({behavior:'smooth'});
   setTimeout(function(){document.getElementById('nom').focus();},700);
