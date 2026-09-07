@@ -136,6 +136,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;background:var(--lime
 .detail-postes{list-style:none;padding:0;margin:.9rem 0 0;font-size:.92rem;color:#CFDAEC}
 .detail-postes li{display:flex;justify-content:space-between;gap:1rem;padding:.35rem 0;border-bottom:1px dashed rgba(255,255,255,.16)}
 .detail-postes li span:last-child{color:var(--lime)}
+.detail-postes.majo li span:last-child{color:#E3B65C}
 .avert{font-size:.88rem;color:#93A6C4;line-height:1.5;margin:.9rem 0 0}
 .btn-plein{width:100%;text-align:center;margin-top:1.2rem;border:0}
 
@@ -352,6 +353,7 @@ footer a:hover{color:var(--lime)}
         <div class="lbl">Estimation indicative, TTC (TVA 8,5 %)</div>
         <div class="montant" id="montant">— <span>€</span></div>
         <ul class="detail-postes" id="postes"></ul>
+        <ul class="detail-postes majo" id="majorations" style="margin-top:.4rem"></ul>
         <p class="avert">Estimation hors terrassement lourd et hors raccordements eau/électricité. Le niveau de finition fait varier le montant de ±12 à 25 % selon les matériaux choisis.</p>
         <button class="btn btn-lime btn-plein" id="envoyerEstim" type="button">Recevoir ce chiffrage détaillé</button>
       </div>
@@ -561,14 +563,29 @@ function euro(n){return Math.round(n/50)*50;}
 function fmt(n){return n.toLocaleString('fr-FR');}
 function calculer(){
   var b=BAREME[elProjet.value],q=parseFloat(elQte.value),k=1;
-  if(elAcces.checked)k*=1.15; if(elDemo.checked)k*=1.08;
-  if(elPente.checked)k*=1.12; if(elUrgent.checked)k*=1.10;
-  if(elLittoral.checked)k*=1.10; if(elHauteur.checked)k*=1.10;
-  k*=parseFloat(elFinition.value);
+  var options=[
+    {el:elAcces, pct:15, label:"Accès difficile"},
+    {el:elDemo, pct:8, label:"Dépose / démolition"},
+    {el:elPente, pct:12, label:"Terrain en pente"},
+    {el:elUrgent, pct:10, label:"Démarrage rapide"},
+    {el:elLittoral, pct:10, label:"Zone littorale"},
+    {el:elHauteur, pct:10, label:"Travaux en hauteur"}
+  ];
+  var lignesMajo=[];
+  options.forEach(function(o){
+    if(o.el.checked){ k*=(1+o.pct/100); lignesMajo.push('<li><span>'+o.label+'</span><span>+'+o.pct+' %</span></li>'); }
+  });
+  var finitionVal=parseFloat(elFinition.value);
+  if(finitionVal!==1){
+    var pctFinition=Math.round((finitionVal-1)*100);
+    k*=finitionVal;
+    lignesMajo.push('<li><span>Finition '+elFinition.options[elFinition.selectedIndex].text.toLowerCase()+'</span><span>'+(pctFinition>0?'+':'')+pctFinition+' %</span></li>');
+  }
   elMontant.innerHTML=fmt(euro(b.bas*q*k))+' – '+fmt(euro(b.haut*q*k))+' <span>€</span>';
   elVal.textContent=q+' '+b.unite;
   elLbl.textContent=(b.unite==='ml')?'Longueur':'Surface';
   elPostes.innerHTML=b.postes.map(function(p){return '<li><span>'+p+'</span><span>compris</span></li>';}).join('');
+  document.getElementById('majorations').innerHTML=lignesMajo.join('');
 }
 function changerProjet(){var b=BAREME[elProjet.value];elQte.min=b.min;elQte.max=b.max;elQte.value=b.def;calculer();}
 elProjet.addEventListener('change',changerProjet);
