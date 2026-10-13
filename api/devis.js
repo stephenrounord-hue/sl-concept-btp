@@ -2,7 +2,6 @@ const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ ok: false });
   const b = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-  if (b.siteweb) return res.status(200).json({ ok: true }); // anti-spam
   const nom = String(b.nom || '').trim().slice(0, 120), tel = String(b.tel || '').trim().slice(0, 40);
   if (!nom || !tel) return res.status(400).json({ ok: false });
   const email = String(b.email || '').trim().slice(0, 160);
@@ -22,6 +21,6 @@ module.exports = async (req, res) => {
       html
     })
   });
-  if (!r.ok) return res.status(502).json({ ok: false });
+  if (!r.ok) { console.error('resend', r.status, await r.text()); return res.status(502).json({ ok: false }); }
   res.status(200).json({ ok: true });
 };

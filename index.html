@@ -471,7 +471,6 @@ footer a:hover{color:var(--lime)}
       </div>
       <div><label for="msg">Votre projet</label><textarea id="msg" placeholder="Surface, longueur, délai souhaité, contraintes d'accès…"></textarea></div>
       <div style="display:flex;flex-wrap:wrap;gap:.8rem;align-items:center">
-        <input type="text" id="siteweb" name="siteweb" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
         <button class="btn btn-lime" type="submit" id="btnEnvoi">Envoyer ma demande</button>
         <a class="btn btn-blanc" id="lienWa" href="#" style="padding:.85rem 1.4rem;font-size:.95rem">ou par WhatsApp</a>
       </div>
@@ -633,7 +632,7 @@ document.getElementById('formDevis').addEventListener('submit',function(e){
   btn.disabled=true;btn.textContent='Envoi…';
   fetch('/api/devis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
     nom:v('nom'),tel:v('tel'),email:v('email'),commune:v('commune'),type:v('type'),msg:v('msg'),
-    estimation:(document.getElementById('montant')||{textContent:''}).textContent.replace(/\s+/g,' ').trim(),siteweb:v('siteweb')})})
+    estimation:(document.getElementById('montant')||{textContent:''}).textContent.replace(/\s+/g,' ').trim()})})
   .then(function(r){if(!r.ok)throw 0;
     note.innerHTML='<strong>Merci, votre demande est bien envoyée.</strong> Nous vous rappelons sous 72 h.';
     document.getElementById('formDevis').reset();btn.textContent='Demande envoyée ✓';})
