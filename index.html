@@ -41,6 +41,7 @@ section{padding:clamp(3.2rem,8vw,6rem) 0}
 .bar nav a:hover{color:var(--vert);border-color:var(--lime)}
 .tel{font-family:"Fira Sans Condensed";font-weight:700;font-size:1.05rem;text-decoration:none;background:var(--vert);color:#fff;padding:.55rem 1.1rem;border-radius:3px;white-space:nowrap;transition:.2s}
 @media(max-width:900px){.tel2{display:none}}
+.delai{margin:.7rem 0 0;font-family:"Fira Sans Condensed";font-weight:700;color:var(--lime)}
 .tel:hover{background:var(--vert-fonce)}
 @media(max-width:900px){.bar nav{display:none}}
 
@@ -328,6 +329,13 @@ footer a:hover{color:var(--lime)}
           <option value="chemin">Chemin d'accès carrossable</option>
           <option value="reparation_ba">Réparation béton armé</option>
           <option value="portail">Portail (battant ou motorisé)</option>
+          <option value="soutenement">Mur de soutènement en béton armé</option>
+          <option value="extension">Extension de maison</option>
+          <option value="terrasse">Terrasse béton / escalier</option>
+          <option value="plots">Plots et fondations (fouilles + béton)</option>
+          <option value="demolition_p">Démolition et évacuation</option>
+          <option value="assainissement">Assainissement (fosse + épandage)</option>
+          <option value="carport">Carport / garage</option>
           <option value="piscine_coque">Piscine coque polyester</option>
         </select>
       </div>
@@ -344,20 +352,31 @@ footer a:hover{color:var(--lime)}
         </select>
       </div>
       <div class="champ">
+        <label for="mode">Prestation</label>
+        <select id="mode">
+          <option value="1" selected>Fourniture et main d'œuvre comprises</option>
+          <option value="0.5">Main d'œuvre seule (vous fournissez les matériaux)</option>
+        </select>
+      </div>
+      <div class="champ">
         <label class="opt"><input type="checkbox" id="acces"> Accès difficile (pente, ruelle étroite, pas de camion)</label>
         <label class="opt"><input type="checkbox" id="demolition"> Dépose ou démolition de l'existant</label>
         <label class="opt"><input type="checkbox" id="pente"> Terrain en pente ou dénivelé important</label>
         <label class="opt"><input type="checkbox" id="urgent"> Démarrage rapide souhaité (sous 15 jours)</label>
         <label class="opt"><input type="checkbox" id="littoral"> Zone littorale (traitement anticorrosion renforcé)</label>
         <label class="opt"><input type="checkbox" id="hauteur"> Travaux en hauteur (étage, toiture)</label>
+        <label class="opt"><input type="checkbox" id="gravats"> Évacuation des gravats et déblais</label>
+        <label class="opt"><input type="checkbox" id="etude"> Étude béton armé / plans d'exécution</label>
+        <label class="opt"><input type="checkbox" id="engin"> Location d'engin (pelle, grue) incluse</label>
       </div>
       <div class="resultat">
         <div class="lbl">Estimation indicative, TTC (TVA 8,5 %)</div>
         <div class="montant" id="montant">— <span>€</span></div>
         <ul class="detail-postes" id="postes"></ul>
         <ul class="detail-postes majo" id="majorations" style="margin-top:.4rem"></ul>
+        <p class="delai" id="delai"></p>
         <p class="avert">Estimation hors terrassement lourd et hors raccordements eau/électricité. Le niveau de finition fait varier le montant de ±12 à 25 % selon les matériaux choisis.</p>
-        <button class="btn btn-lime btn-plein" id="envoyerEstim" type="button">Recevoir ce chiffrage détaillé</button>
+        <button class="btn btn-lime btn-plein" id="envoyerEstim" type="button">Demander un devis sur cette base</button>
       </div>
     </div>
   </div>
@@ -469,7 +488,7 @@ footer a:hover{color:var(--lime)}
         <select id="type">
           <option>Maison individuelle / bungalow</option><option>Clôture</option><option>Piscine</option>
           <option>Chemin d'accès / terrassement</option><option>Rénovation tous corps d'état</option>
-          <option>Réparation béton armé</option><option>Autre</option>
+          <option>Réparation béton armé</option><option>Mur de soutènement / démolition / assainissement</option><option>Autre</option>
         </select>
       </div>
       <div><label for="msg">Votre projet</label><textarea id="msg" placeholder="Surface, longueur, délai souhaité, contraintes d'accès…"></textarea></div>
@@ -554,15 +573,26 @@ var BAREME={
  chemin:{nom:"Chemin d'accès carrossable",unite:"ml",min:10,max:200,def:40,bas:190,haut:280,postes:["Terrassement et forme","Empierrement ou dalle béton","Finition roulante"]},
  reparation_ba:{nom:"Réparation béton armé",unite:"m²",min:5,max:100,def:15,bas:190,haut:340,postes:["Purge et passivation des aciers","Reprofilage mortier R4","Protection anticarbonatation"]},
  portail:{nom:"Portail battant ou motorisé",unite:"ml",min:3,max:8,def:4,bas:450,haut:1100,postes:["Structure aluminium ou fer","Poteaux et scellement","Motorisation en option"]},
- piscine_coque:{nom:"Piscine coque polyester",unite:"m²",min:8,max:40,def:16,bas:700,haut:980,postes:["Terrassement et pose de la coque","Raccordements et remblai","Margelles et finitions"]}
+ piscine_coque:{nom:"Piscine coque polyester",unite:"m²",min:8,max:40,def:16,bas:700,haut:980,postes:["Terrassement et pose de la coque","Raccordements et remblai","Margelles et finitions"]},
+ soutenement:{nom:"Mur de soutènement en béton armé",unite:"m²",min:5,max:150,def:25,bas:320,haut:520,postes:["Fouille et semelle ferraillée","Voile béton armé banché","Drainage et remblai"]},
+ extension:{nom:"Extension de maison",unite:"m²",min:10,max:100,def:25,bas:850,haut:1250,postes:["Fondations et raccord à l'existant","Élévation, chaînages, dalle","Charpente et couverture"]},
+ terrasse:{nom:"Terrasse béton / escalier",unite:"m²",min:5,max:150,def:30,bas:150,haut:250,postes:["Préparation et ferraillage","Coulage et finition","Marches et nez de marche si escalier"]},
+ plots:{nom:"Plots et fondations (fouilles + béton)",unite:"plots",min:1,max:60,def:8,bas:180,haut:320,postes:["Fouille à la dimension","Ferraillage","Coulage béton"]},
+ demolition_p:{nom:"Démolition et évacuation",unite:"m²",min:5,max:300,def:30,bas:40,haut:90,postes:["Démolition manuelle ou mécanique","Tri et chargement","Évacuation en décharge"]},
+ assainissement:{nom:"Assainissement (fosse + épandage)",unite:"u",min:1,max:3,def:1,bas:4500,haut:9000,postes:["Fouille et fosse toutes eaux","Regards et canalisations","Épandage et remblai"]},
+ carport:{nom:"Carport / garage",unite:"m²",min:12,max:80,def:20,bas:350,haut:650,postes:["Plots et dalle béton","Structure porteuse","Couverture"]}
 };
+var DELAI={rigide:[3,.15],muret:[4,.35],muretseul:[3,.25],grillage:[2,.08],piscine:[35,1.2],horssol:[10,.8],dalle:[4,.2],carrelage:[3,.25],
+ maison:[60,1.2],bungalow:[30,1.5],renovation:[7,.5],surelevation:[40,1],terrassement:[2,.08],chemin:[3,.3],reparation_ba:[3,.6],portail:[3,1.5],
+ piscine_coque:[10,.8],soutenement:[7,.5],extension:[25,1.5],terrasse:[3,.25],plots:[2,.4],demolition_p:[2,.1],assainissement:[5,2],carport:[6,.7]};
 var elProjet=document.getElementById('projet'),elQte=document.getElementById('qte'),
     elVal=document.getElementById('valQte'),elLbl=document.getElementById('lblQte'),
     elMontant=document.getElementById('montant'),elPostes=document.getElementById('postes'),
     elAcces=document.getElementById('acces'),elDemo=document.getElementById('demolition'),
     elFinition=document.getElementById('finition'),elPente=document.getElementById('pente'),
     elUrgent=document.getElementById('urgent'),elLittoral=document.getElementById('littoral'),
-    elHauteur=document.getElementById('hauteur');
+    elHauteur=document.getElementById('hauteur'),elMode=document.getElementById('mode'),
+    elGravats=document.getElementById('gravats'),elEtude=document.getElementById('etude'),elEngin=document.getElementById('engin');
 function euro(n){return Math.round(n/50)*50;}
 function fmt(n){return n.toLocaleString('fr-FR');}
 function calculer(){
@@ -573,12 +603,17 @@ function calculer(){
     {el:elPente, pct:12, label:"Terrain en pente"},
     {el:elUrgent, pct:10, label:"Démarrage rapide"},
     {el:elLittoral, pct:10, label:"Zone littorale"},
-    {el:elHauteur, pct:10, label:"Travaux en hauteur"}
+    {el:elHauteur, pct:10, label:"Travaux en hauteur"},
+    {el:elGravats, pct:5, label:"Évacuation des gravats"},
+    {el:elEtude, pct:4, label:"Étude béton armé / plans"},
+    {el:elEngin, pct:6, label:"Location d'engin incluse"}
   ];
   var lignesMajo=[];
   options.forEach(function(o){
     if(o.el.checked){ k*=(1+o.pct/100); lignesMajo.push('<li><span>'+o.label+'</span><span>+'+o.pct+' %</span></li>'); }
   });
+  var modeVal=parseFloat(elMode.value);
+  if(modeVal!==1){k*=modeVal;lignesMajo.push('<li><span>Main d\u2019œuvre seule</span><span>−'+Math.round((1-modeVal)*100)+' %</span></li>');}
   var finitionVal=parseFloat(elFinition.value);
   if(finitionVal!==1){
     var pctFinition=Math.round((finitionVal-1)*100);
@@ -587,13 +622,16 @@ function calculer(){
   }
   elMontant.innerHTML=fmt(euro(b.bas*q*k))+' – '+fmt(euro(b.haut*q*k))+' <span>€</span>';
   elVal.textContent=q+' '+b.unite;
-  elLbl.textContent=(b.unite==='ml')?'Longueur':'Surface';
+  elLbl.textContent=(b.unite==='ml')?'Longueur':(b.unite==='m²'?'Surface':'Quantité');
+  var dl=DELAI[elProjet.value]||[5,.5],j=Math.ceil(dl[0]+dl[1]*q),j2=Math.ceil(j*1.3);
+  function dur(n){return n>=14?Math.round(n/7)+' sem.':n+' j';}
+  document.getElementById('delai').textContent='Durée de chantier indicative : '+(dur(j)===dur(j2)?'environ '+dur(j):dur(j)+' à '+dur(j2))+' (hors intempéries)';
   elPostes.innerHTML=b.postes.map(function(p){return '<li><span>'+p+'</span><span>compris</span></li>';}).join('');
   document.getElementById('majorations').innerHTML=lignesMajo.join('');
 }
 function changerProjet(){var b=BAREME[elProjet.value];elQte.min=b.min;elQte.max=b.max;elQte.value=b.def;calculer();}
 elProjet.addEventListener('change',changerProjet);
-[elQte,elAcces,elDemo,elFinition,elPente,elUrgent,elLittoral,elHauteur].forEach(function(e){e.addEventListener('input',calculer);e.addEventListener('change',calculer);});
+[elQte,elAcces,elDemo,elFinition,elPente,elUrgent,elLittoral,elHauteur,elMode,elGravats,elEtude,elEngin].forEach(function(e){e.addEventListener('input',calculer);e.addEventListener('change',calculer);});
 changerProjet();
 
 var CORRESPONDANCE={
@@ -603,7 +641,9 @@ var CORRESPONDANCE={
   maison:"Maison individuelle / bungalow", bungalow:"Maison individuelle / bungalow",
   renovation:"Rénovation tous corps d'état", surelevation:"Maison individuelle / bungalow",
   terrassement:"Chemin d'accès / terrassement", chemin:"Chemin d'accès / terrassement",
-  reparation_ba:"Réparation béton armé"
+  reparation_ba:"Réparation béton armé",
+  soutenement:"Mur de soutènement / démolition / assainissement", demolition_p:"Mur de soutènement / démolition / assainissement", assainissement:"Mur de soutènement / démolition / assainissement",
+  extension:"Maison individuelle / bungalow", terrasse:"Maison individuelle / bungalow", plots:"Maison individuelle / bungalow", carport:"Maison individuelle / bungalow"
 };
 document.getElementById('envoyerEstim').addEventListener('click',function(){
   var b=BAREME[elProjet.value],t=document.getElementById('type'),cible=CORRESPONDANCE[elProjet.value];
@@ -612,7 +652,7 @@ document.getElementById('envoyerEstim').addEventListener('click',function(){
   document.getElementById('msg').value=b.nom+' — '+elQte.value+' '+b.unite+' — finition '+finitionTxt+
     (elAcces.checked?'\nAccès difficile':'')+(elDemo.checked?'\nDépose de l\'existant à prévoir':'')+
     (elPente.checked?'\nTerrain en pente':'')+(elUrgent.checked?'\nDémarrage rapide souhaité':'')+
-    (elLittoral.checked?'\nZone littorale':'')+(elHauteur.checked?'\nTravaux en hauteur':'')+
+    (elLittoral.checked?'\nZone littorale':'')+(elHauteur.checked?'\nTravaux en hauteur':'')+(elGravats.checked?'\nÉvacuation des gravats':'')+(elEtude.checked?'\nÉtude béton armé / plans':'')+(elEngin.checked?'\nLocation d\'engin incluse':'')+(parseFloat(elMode.value)!==1?'\nMain d\'œuvre seule':'')+
     '\nEstimation obtenue sur le site : '+elMontant.textContent.replace(/\s+/g,' ').trim();
   document.getElementById('devis').scrollIntoView({behavior:'smooth'});
   setTimeout(function(){document.getElementById('nom').focus();},700);
