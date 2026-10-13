@@ -40,6 +40,7 @@ section{padding:clamp(3.2rem,8vw,6rem) 0}
 .bar nav a{text-decoration:none;color:var(--encre);padding-bottom:2px;border-bottom:2px solid transparent}
 .bar nav a:hover{color:var(--vert);border-color:var(--lime)}
 .tel{font-family:"Fira Sans Condensed";font-weight:700;font-size:1.05rem;text-decoration:none;background:var(--vert);color:#fff;padding:.55rem 1.1rem;border-radius:3px;white-space:nowrap;transition:.2s}
+@media(max-width:900px){.tel2{display:none}}
 .tel:hover{background:var(--vert-fonce)}
 @media(max-width:900px){.bar nav{display:none}}
 
@@ -241,6 +242,7 @@ footer a:hover{color:var(--lime)}
       <a href="#devis">Devis gratuit</a>
     </nav>
     <a class="tel" href="tel:+590690270977">0690 27 09 77</a>
+    <a class="tel tel2" href="tel:+590690595042">0690 59 50 42</a>
   </div>
 </header>
 
@@ -303,7 +305,7 @@ footer a:hover{color:var(--lime)}
       <div class="filet"></div>
       <p style="color:#CFDAEC;max-width:42ch">Choisissez votre projet, ajustez la quantité : vous obtenez une fourchette réaliste, TVA DOM 8,5 % comprise, calculée sur nos prix de chantier réels en Guadeloupe.</p>
       <p style="color:#93A6C4;font-size:.95rem;max-width:42ch;margin-top:1.2rem">Cet outil donne un ordre de grandeur pour vous situer. Le prix ferme est établi après visite technique : accès, nature du sol et niveau de finition font varier le montant.</p>
-      <div class="contacts" style="margin-top:1.6rem"><a href="tel:+590690270977"><small>UNE QUESTION ?</small>0690 27 09 77</a></div>
+      <div class="contacts" style="margin-top:1.6rem"><a href="tel:+590690270977"><small>UNE QUESTION ?</small>0690 27 09 77</a><a href="tel:+590690595042"><small>OU APPELEZ</small>0690 59 50 42</a></div>
     </div>
 
     <div class="panneau">
@@ -448,6 +450,7 @@ footer a:hover{color:var(--lime)}
       <p style="color:#DCE7D6;max-width:40ch">Décrivez les travaux en quelques lignes. Nous vous rappelons pour organiser la visite technique.</p>
       <div class="contacts">
         <a href="tel:+590690270977"><small>TÉLÉPHONE</small>0690 27 09 77</a>
+        <a href="tel:+590690595042"><small>TÉLÉPHONE</small>0690 59 50 42</a>
         <a href="https://wa.me/590690270977" target="_blank" rel="noopener"><small>WHATSAPP</small>Envoyer des photos du chantier</a>
         <a href="mailto:SLconcept-btp@outlook.com"><small>E-MAIL</small>SLconcept-btp@outlook.com</a>
         <a href="https://maps.google.com/?q=Chemin+de+la+Manioquerie+97116+Pointe-Noire" target="_blank" rel="noopener"><small>ADRESSE</small>Chemin de la Manioquerie, 97116 Pointe-Noire</a>
@@ -498,6 +501,7 @@ footer a:hover{color:var(--lime)}
     </div>
     <div><h4>Contact</h4><ul>
       <li><a href="tel:+590690270977">0690 27 09 77</a></li>
+      <li><a href="tel:+590690595042">0690 59 50 42</a></li>
       <li><a href="https://wa.me/590690270977" target="_blank" rel="noopener">WhatsApp</a></li>
       <li><a href="mailto:SLconcept-btp@outlook.com">SLconcept-btp@outlook.com</a></li>
       <li><a href="https://www.instagram.com/sl_concept_btp/" target="_blank" rel="noopener">Instagram</a></li>
@@ -637,7 +641,7 @@ document.getElementById('formDevis').addEventListener('submit',function(e){
     note.innerHTML='<strong>Merci, votre demande est bien envoyée.</strong> Nous vous rappelons sous 72 h.';
     document.getElementById('formDevis').reset();btn.textContent='Demande envoyée ✓';})
   .catch(function(err){btn.disabled=false;btn.textContent='Envoyer ma demande';
-    note.innerHTML='L\u2019envoi a échoué. Utilisez le bouton WhatsApp, ou appelez le <strong>0690 27 09 77</strong>.';});
+    note.innerHTML='L\u2019envoi a échoué. Utilisez le bouton WhatsApp, ou appelez le <strong>0690 27 09 77</strong> ou le <strong>0690 59 50 42</strong>.';});
 });
 </script>
 </body>
