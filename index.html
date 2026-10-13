@@ -471,10 +471,11 @@ footer a:hover{color:var(--lime)}
       </div>
       <div><label for="msg">Votre projet</label><textarea id="msg" placeholder="Surface, longueur, délai souhaité, contraintes d'accès…"></textarea></div>
       <div style="display:flex;flex-wrap:wrap;gap:.8rem;align-items:center">
-        <button class="btn btn-lime" type="submit">Envoyer sur WhatsApp</button>
-        <a class="btn btn-blanc" id="lienMail" href="#" style="padding:.85rem 1.4rem;font-size:.95rem">ou par e-mail</a>
+        <input type="text" id="siteweb" name="siteweb" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
+        <button class="btn btn-lime" type="submit" id="btnEnvoi">Envoyer ma demande</button>
+        <a class="btn btn-blanc" id="lienWa" href="#" style="padding:.85rem 1.4rem;font-size:.95rem">ou par WhatsApp</a>
       </div>
-      <p class="note" id="note">Réponse la plus rapide : WhatsApp ouvre avec votre demande déjà rédigée, il ne reste qu'à l'envoyer.</p>
+      <p class="note" id="note">Votre demande arrive directement chez SL CONCEPT BTP. Réponse sous 72 h.</p>
     </form>
   </div>
 </section>
@@ -622,39 +623,22 @@ function texteDemande(){
     '\nCommune : '+v('commune')+'\nType de projet : '+v('type')+
     '\n\nProjet :\n'+v('msg');
 }
+function ouvrirWa(){window.open('https://wa.me/590690270977?text='+encodeURIComponent(texteDemande()),'_blank');}
+document.getElementById('lienWa').addEventListener('click',function(e){e.preventDefault();ouvrirWa();});
 document.getElementById('formDevis').addEventListener('submit',function(e){
   e.preventDefault();
-  if(!document.getElementById('nom').value.trim()||!document.getElementById('tel').value.trim()){
-    document.getElementById('note').textContent='Merci de renseigner au moins votre nom et votre téléphone.';
-    return;
-  }
-  window.open('https://wa.me/590690270977?text='+encodeURIComponent(texteDemande()),'_blank');
-  document.getElementById('note').textContent='WhatsApp s\u2019est ouvert dans un nouvel onglet avec votre demande. Il ne reste qu\u2019à l\u2019envoyer.';
-});
-document.getElementById('lienMail').addEventListener('click',function(e){
-  e.preventDefault();
   var v=function(id){return document.getElementById(id).value.trim();};
-  var sujet='Demande de devis — '+v('type')+' — '+(v('nom')||'nouveau contact');
-  var corpsComplet='À : SLconcept-btp@outlook.com\nObjet : '+sujet+'\n\n'+texteDemande();
-
-  function afficherInstructions(copieReussie){
-    document.getElementById('note').innerHTML = copieReussie
-      ? 'Message copié dans le presse-papier ! Ouvrez votre application mail, collez le message, et envoyez-le à <strong>SLconcept-btp@outlook.com</strong>.'
-      : 'Envoyez votre demande à <strong>SLconcept-btp@outlook.com</strong> :<br><br>'+corpsComplet.replace(/\n/g,'<br>');
-  }
-
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(corpsComplet).then(function(){
-      afficherInstructions(true);
-    }).catch(function(){
-      afficherInstructions(false);
-    });
-  } else {
-    afficherInstructions(false);
-  }
-
-  // tente aussi mailto: au cas où une messagerie serait configurée
-  window.location.href='mailto:SLconcept-btp@outlook.com?subject='+encodeURIComponent(sujet)+'&body='+encodeURIComponent(texteDemande());
+  var note=document.getElementById('note'),btn=document.getElementById('btnEnvoi');
+  if(!v('nom')||!v('tel')){note.textContent='Merci de renseigner au moins votre nom et votre téléphone.';return;}
+  btn.disabled=true;btn.textContent='Envoi…';
+  fetch('/api/devis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    nom:v('nom'),tel:v('tel'),email:v('email'),commune:v('commune'),type:v('type'),msg:v('msg'),
+    estimation:(document.getElementById('montant')||{textContent:''}).textContent.replace(/\s+/g,' ').trim(),siteweb:v('siteweb')})})
+  .then(function(r){if(!r.ok)throw 0;
+    note.innerHTML='<strong>Merci, votre demande est bien envoyée.</strong> Nous vous rappelons sous 72 h.';
+    document.getElementById('formDevis').reset();btn.textContent='Demande envoyée ✓';})
+  .catch(function(){btn.disabled=false;btn.textContent='Envoyer ma demande';
+    note.innerHTML='L\u2019envoi a échoué. Utilisez le bouton WhatsApp, ou appelez le <strong>0690 27 09 77</strong>.';});
 });
 </script>
 </body>
