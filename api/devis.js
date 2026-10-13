@@ -1,5 +1,6 @@
 const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 module.exports = async (req, res) => {
+ try {
   if (req.method !== 'POST') return res.status(405).json({ ok: false });
   const b = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
   const nom = String(b.nom || '').trim().slice(0, 120), tel = String(b.tel || '').trim().slice(0, 40);
@@ -21,6 +22,7 @@ module.exports = async (req, res) => {
       html
     })
   });
-  if (!r.ok) { console.error('resend', r.status, await r.text()); return res.status(502).json({ ok: false }); }
+  if (!r.ok) { const t = await r.text(); console.error('resend', r.status, t); return res.status(502).json({ ok: false, diag: 'resend ' + r.status + ' ' + t.slice(0, 200) }); }
   res.status(200).json({ ok: true });
+ } catch (e) { console.error(e); res.status(500).json({ ok: false, diag: 'crash ' + String(e && e.message).slice(0, 200) }); }
 };
