@@ -42,6 +42,12 @@ section{padding:clamp(3.2rem,8vw,6rem) 0}
 .tel{font-family:"Fira Sans Condensed";font-weight:700;font-size:1.05rem;text-decoration:none;background:var(--vert);color:#fff;padding:.55rem 1.1rem;border-radius:3px;white-space:nowrap;transition:.2s}
 @media(max-width:900px){.tel2{display:none}}
 .delai{margin:.7rem 0 0;font-family:"Fira Sans Condensed";font-weight:700;color:var(--lime)}
+#etoiles button{background:none;border:0;padding:0;cursor:pointer;color:rgba(255,255,255,.28);font-size:inherit;transition:.15s}
+#etoiles button.on{color:#F5B301}
+.avis-carte{background:#fff;border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1rem;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.avis-carte .st{color:#F5B301;font-size:1.25rem;letter-spacing:.1em}
+.avis-carte .qui{font-family:"Fira Sans Condensed";font-weight:700;margin-top:.5rem}
+.avis-carte .qui span{font-weight:400;color:#666;font-family:"Fira Sans"}
 .tel:hover{background:var(--vert-fonce)}
 @media(max-width:900px){.bar nav{display:none}}
 
@@ -446,6 +452,30 @@ footer a:hover{color:var(--lime)}
   </div>
 </section>
 
+<!-- ================= AVIS ================= -->
+<section class="creme" id="avis">
+  <div class="wrap" style="max-width:840px">
+    <div class="titre"><h2>Avis de nos clients</h2><div class="sous">votre retour compte pour nous</div></div>
+    <div class="filet"></div>
+    <div id="listeAvis"></div>
+    <form id="formAvis" style="background:var(--vert-nuit);color:#fff;padding:1.6rem;border-radius:6px">
+      <h3 style="margin-bottom:1rem;color:#fff">Vous avez fait appel à SL CONCEPT BTP ?</h3>
+      <div class="duo">
+        <div><label for="avNom">Nom et prénom</label><input id="avNom" required maxlength="80" placeholder="Votre nom"></div>
+        <div><label for="avCommune">Commune</label><input id="avCommune" maxlength="80" placeholder="Pointe-Noire, Le Gosier…"></div>
+      </div>
+      <div class="champ"><label>Votre note</label>
+        <div id="etoiles" role="radiogroup" aria-label="Note sur 5" style="display:flex;gap:.3rem;font-size:2.2rem;line-height:1">
+          <button type="button" data-n="1" aria-label="1 étoile">★</button><button type="button" data-n="2" aria-label="2 étoiles">★</button><button type="button" data-n="3" aria-label="3 étoiles">★</button><button type="button" data-n="4" aria-label="4 étoiles">★</button><button type="button" data-n="5" aria-label="5 étoiles">★</button>
+        </div>
+      </div>
+      <div class="champ"><label for="avTexte">Votre avis</label><textarea id="avTexte" required minlength="10" maxlength="1500" placeholder="Type de travaux, qualité, délais, relation…"></textarea></div>
+      <button class="btn btn-lime" type="submit" id="btnAvis">Envoyer mon avis</button>
+      <p class="note" id="noteAvis">Votre avis est publié après validation par SL CONCEPT BTP.</p>
+    </form>
+  </div>
+</section>
+
 <!-- ================= FAQ ================= -->
 <section>
   <div class="wrap" style="max-width:840px">
@@ -683,6 +713,32 @@ document.getElementById('formDevis').addEventListener('submit',function(e){
   .catch(function(err){btn.disabled=false;btn.textContent='Envoyer ma demande';
     note.innerHTML='L\u2019envoi a échoué. Utilisez le bouton WhatsApp, ou appelez le <strong>0690 27 09 77</strong> ou le <strong>0690 59 50 42</strong>.';});
 });
+
+/* ===== AVIS : ajouter ici uniquement des avis réels et validés par SL CONCEPT BTP ===== */
+var AVIS_PUBLIES=[]; /* ex : {nom:"Prénom N.",commune:"Pointe-Noire",note:5,texte:"…"} */
+(function(){
+  var liste=document.getElementById('listeAvis');
+  liste.innerHTML=AVIS_PUBLIES.map(function(a){
+    var e=function(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+    return '<div class="avis-carte"><div class="st">'+'★'.repeat(a.note)+'☆'.repeat(5-a.note)+'</div><p>'+e(a.texte)+'</p><div class="qui">'+e(a.nom)+(a.commune?' <span>— '+e(a.commune)+'</span>':'')+'</div></div>';
+  }).join('');
+  var note=0,bts=document.querySelectorAll('#etoiles button');
+  function maj(n){bts.forEach(function(b){b.classList.toggle('on',+b.dataset.n<=n);});}
+  bts.forEach(function(b){b.addEventListener('click',function(){note=+b.dataset.n;maj(note);});
+    b.addEventListener('mouseenter',function(){maj(+b.dataset.n);});});
+  document.getElementById('etoiles').addEventListener('mouseleave',function(){maj(note);});
+  document.getElementById('formAvis').addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=document.getElementById('noteAvis'),btn=document.getElementById('btnAvis');
+    if(!note){n.textContent='Merci de choisir une note de 1 à 5 étoiles.';return;}
+    btn.disabled=true;btn.textContent='Envoi…';
+    fetch('/api/avis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      nom:document.getElementById('avNom').value,commune:document.getElementById('avCommune').value,note:note,texte:document.getElementById('avTexte').value})})
+    .then(function(r){if(!r.ok)throw 0;n.innerHTML='<strong>Merci pour votre avis !</strong> Il sera publié après validation.';
+      document.getElementById('formAvis').reset();note=0;maj(0);btn.textContent='Avis envoyé ✓';})
+    .catch(function(){btn.disabled=false;btn.textContent='Envoyer mon avis';n.textContent='L\u2019envoi a échoué, merci de réessayer ou de nous appeler.';});
+  });
+})();
 </script>
 </body>
 </html>
