@@ -637,7 +637,7 @@ document.getElementById('formDevis').addEventListener('submit',function(e){
     note.innerHTML='<strong>Merci, votre demande est bien envoyée.</strong> Nous vous rappelons sous 72 h.';
     document.getElementById('formDevis').reset();btn.textContent='Demande envoyée ✓';})
   .catch(function(err){btn.disabled=false;btn.textContent='Envoyer ma demande';
-    note.innerHTML='L\u2019envoi a échoué. Utilisez le bouton WhatsApp, ou appelez le <strong>0690 27 09 77</strong>.<br><small style="opacity:.6">'+String(err).slice(0,260).replace(/</g,'&lt;')+'</small>';});
+    note.innerHTML='L\u2019envoi a échoué. Utilisez le bouton WhatsApp, ou appelez le <strong>0690 27 09 77</strong>.';});
 });
 </script>
 </body>
