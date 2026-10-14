@@ -34,13 +34,13 @@ section{padding:clamp(3.2rem,8vw,6rem) 0}
 /* ---------- header ---------- */
 .bar{position:sticky;top:0;z-index:60;background:#fff;border-bottom:3px solid var(--lime);box-shadow:0 2px 14px rgba(0,0,0,.06)}
 .bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.65rem 0}
-.mark{font-family:"Fira Sans Condensed";font-weight:800;font-size:1.45rem;text-decoration:none;color:var(--navy);letter-spacing:-.01em}
+.mark{white-space:nowrap;font-family:"Fira Sans Condensed";font-weight:800;font-size:1.45rem;text-decoration:none;color:var(--navy);letter-spacing:-.01em}
 .mark span{color:var(--vert)}
-.bar nav{display:flex;gap:1.4rem;font-family:"Fira Sans Condensed";font-weight:600;font-size:1.02rem}
-.bar nav a{text-decoration:none;color:var(--encre);padding-bottom:2px;border-bottom:2px solid transparent}
+.bar nav{display:flex;gap:1.1rem;font-family:"Fira Sans Condensed";font-weight:600;font-size:1.02rem}
+.bar nav a{white-space:nowrap;text-decoration:none;color:var(--encre);padding-bottom:2px;border-bottom:2px solid transparent}
 .bar nav a:hover{color:var(--vert);border-color:var(--lime)}
 .tel{font-family:"Fira Sans Condensed";font-weight:700;font-size:1.05rem;text-decoration:none;background:var(--vert);color:#fff;padding:.55rem 1.1rem;border-radius:3px;white-space:nowrap;transition:.2s}
-@media(max-width:900px){.tel2{display:none}}
+@media(max-width:1350px){.tel2{display:none}}
 .delai{margin:.7rem 0 0;font-family:"Fira Sans Condensed";font-weight:700;color:var(--lime)}
 #etoiles button{background:none;border:0;padding:0;cursor:pointer;color:rgba(255,255,255,.28);font-size:inherit;transition:.15s}
 #etoiles button.on{color:#F5B301}
@@ -54,7 +54,7 @@ section{padding:clamp(3.2rem,8vw,6rem) 0}
 .bar.ouvert .burger span:nth-child(1){transform:translateY(8px) rotate(45deg)}
 .bar.ouvert .burger span:nth-child(2){opacity:0}
 .bar.ouvert .burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
-@media(max-width:900px){
+@media(max-width:1100px){
  .burger{display:flex}
  .bar .mark{margin-right:auto}
  .bar nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;background:#fff;border-bottom:3px solid var(--lime);box-shadow:0 12px 24px rgba(0,0,0,.12);padding:.4rem 0}
@@ -292,6 +292,7 @@ footer a:hover{color:var(--lime)}
       <a href="/qui-sommes-nous.html">Qui sommes-nous</a>
       <a href="#methode">Méthode</a>
       <a href="#realisations">Réalisations</a>
+      <a href="/zone-intervention.html">Zone d'intervention</a>
       <a href="/avis.html">Avis clients</a>
       <a href="#devis">Devis gratuit</a>
     </nav>
@@ -480,18 +481,6 @@ footer a:hover{color:var(--lime)}
       <figure class="vue"><img src="/img/photo-6.jpg" alt="Muret béton avant et après rénovation par SL CONCEPT BTP"><figcaption>Muret béton — avant / après</figcaption></figure>
       <figure class="vue"><img src="/img/photo-7.jpg" alt="Chantier en cours, structure et charpente SL CONCEPT BTP"><figcaption>Chantier en cours — structure</figcaption></figure>
     </div>
-  </div>
-</section>
-
-<!-- ================= ZONE ================= -->
-<section class="creme" id="zone">
-  <div class="wrap">
-    <div class="titre"><h2>Zone d'intervention</h2><div class="sous">toute la Guadeloupe</div></div>
-    <div class="filet"></div>
-    <p class="intro">Basés à Pointe-Noire, nous intervenons sur l'ensemble de la Guadeloupe continentale.</p>
-    <h3 class="zone-t">Basse-Terre</h3><div class="communes"><span>Pointe-Noire</span><span>Deshaies</span><span>Bouillante</span><span>Vieux-Habitants</span><span>Baillif</span><span>Basse-Terre</span><span>Saint-Claude</span><span>Gourbeyre</span><span>Vieux-Fort</span><span>Trois-Rivières</span><span>Capesterre-Belle-Eau</span><span>Goyave</span><span>Petit-Bourg</span><span>Baie-Mahault</span><span>Lamentin</span><span>Sainte-Rose</span></div>
-    <h3 class="zone-t">Grande-Terre</h3><div class="communes"><span>Les Abymes</span><span>Pointe-à-Pitre</span><span>Le Gosier</span><span>Sainte-Anne</span><span>Saint-François</span><span>Le Moule</span><span>Morne-à-l'Eau</span><span>Petit-Canal</span><span>Port-Louis</span><span>Anse-Bertrand</span></div>
-    <p class="note" style="margin-top:1rem;color:var(--gris)">Marie-Galante, Les Saintes et La Désirade : sur étude, contactez-nous.</p>
   </div>
 </section>
 
