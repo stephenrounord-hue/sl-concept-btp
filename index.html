@@ -49,7 +49,19 @@ section{padding:clamp(3.2rem,8vw,6rem) 0}
 .avis-carte .qui{font-family:"Fira Sans Condensed";font-weight:700;margin-top:.5rem}
 .avis-carte .qui span{font-weight:400;color:#666;font-family:"Fira Sans"}
 .tel:hover{background:var(--vert-fonce)}
-@media(max-width:900px){.bar nav{display:none}}
+.burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:10px;background:var(--vert);border:0;border-radius:4px;cursor:pointer;flex:none}
+.burger span{display:block;height:3px;width:100%;background:#fff;border-radius:2px;transition:.25s}
+.bar.ouvert .burger span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.bar.ouvert .burger span:nth-child(2){opacity:0}
+.bar.ouvert .burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+@media(max-width:900px){
+ .burger{display:flex}
+ .bar .mark{margin-right:auto}
+ .bar nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;background:#fff;border-bottom:3px solid var(--lime);box-shadow:0 12px 24px rgba(0,0,0,.12);padding:.4rem 0}
+ .bar.ouvert nav{display:flex}
+ .bar nav a{padding:1rem 6vw;border-bottom:1px solid #eee;font-size:1.15rem}
+ .bar nav a:last-child{border-bottom:0;color:var(--vert)}
+}
 
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:min(88vh,760px);display:flex;align-items:flex-end;color:#fff;overflow:hidden}
@@ -238,17 +250,19 @@ footer a:hover{color:var(--lime)}
 <body>
 <div class="jauge" id="jauge"></div>
 
-<header class="bar">
+<header class="bar" id="bar">
   <div class="wrap">
     <a class="mark" href="#haut">SL CONCEPT <span>BTP</span></a>
     <nav>
       <a href="#budget">Estimer mon budget</a>
       <a href="#methode">Méthode</a>
       <a href="#realisations">Réalisations</a>
+      <a href="#avis">Avis clients</a>
       <a href="#devis">Devis gratuit</a>
     </nav>
     <a class="tel" href="tel:+590690270977">0690 27 09 77</a>
     <a class="tel tel2" href="tel:+590690595042">0690 59 50 42</a>
+    <button class="burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menuMobile"><span></span><span></span><span></span></button>
   </div>
 </header>
 
@@ -720,6 +734,13 @@ var AVIS_PUBLIES=[]; /* ex : {nom:"Prénom N.",commune:"Pointe-Noire",note:5,tex
       document.getElementById('formAvis').reset();note=0;maj(0);btn.textContent='Avis envoyé ✓';})
     .catch(function(){btn.disabled=false;btn.textContent='Envoyer mon avis';n.textContent='L\u2019envoi a échoué, merci de réessayer ou de nous appeler.';});
   });
+})();
+
+(function(){var bar=document.getElementById('bar'),b=document.getElementById('burger');
+  function fermer(){bar.classList.remove('ouvert');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Ouvrir le menu');}
+  b.addEventListener('click',function(){var o=bar.classList.toggle('ouvert');b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Fermer le menu':'Ouvrir le menu');});
+  bar.querySelectorAll('nav a').forEach(function(a){a.addEventListener('click',fermer);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')fermer();});
 })();
 </script>
 </body>
