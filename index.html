@@ -263,9 +263,23 @@ footer a:hover{color:var(--lime)}
  .tel{font-size:.95rem;padding:.5rem .8rem}
  .bar .mark{font-size:1.15rem;white-space:nowrap}
 }
+
+.apropos{display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(1.5rem,5vw,3.5rem);align-items:center}
+.apropos img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+.apropos p{margin:0 0 .9rem;color:var(--gris)}
+.apropos-faits{list-style:none;padding:0;margin:1.2rem 0 0;display:grid;gap:.5rem}
+.apropos-faits li{padding-left:1.4rem;position:relative}
+.apropos-faits li:before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;border-radius:50%;background:var(--lime)}
+@media(max-width:800px){.apropos{grid-template-columns:1fr}}
+.zone-t{font-family:"Fira Sans Condensed";font-size:1.15rem;margin:1.2rem 0 .6rem;color:var(--navy)}
+.communes{display:flex;flex-wrap:wrap;gap:.45rem}
+.communes span{background:#fff;border:1px solid var(--bord);border-radius:30px;padding:.35rem .85rem;font-size:.92rem}
+.liens-legaux{grid-column:1/-1;font-size:.85rem;margin-top:.6rem}
+.liens-legaux a{color:#8FA0BE;margin-right:1.2rem}
 </style>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "GeneralContractor", "name": "SL CONCEPT BTP", "url": "https://www.slconceptbtp.pro/", "telephone": "+590690270977", "email": "SLconcept-btp@outlook.com", "address": {"@type": "PostalAddress", "streetAddress": "Chemin de la Manioquerie", "postalCode": "97116", "addressLocality": "Pointe-Noire", "addressRegion": "Guadeloupe", "addressCountry": "FR"}, "areaServed": [{"@type": "City", "name": "Pointe-Noire"}, {"@type": "City", "name": "Deshaies"}, {"@type": "City", "name": "Bouillante"}, {"@type": "City", "name": "Vieux-Habitants"}, {"@type": "City", "name": "Baillif"}, {"@type": "City", "name": "Basse-Terre"}, {"@type": "City", "name": "Saint-Claude"}, {"@type": "City", "name": "Gourbeyre"}, {"@type": "City", "name": "Vieux-Fort"}, {"@type": "City", "name": "Trois-Rivières"}, {"@type": "City", "name": "Capesterre-Belle-Eau"}, {"@type": "City", "name": "Goyave"}, {"@type": "City", "name": "Petit-Bourg"}, {"@type": "City", "name": "Baie-Mahault"}, {"@type": "City", "name": "Lamentin"}, {"@type": "City", "name": "Sainte-Rose"}, {"@type": "City", "name": "Les Abymes"}, {"@type": "City", "name": "Pointe-à-Pitre"}, {"@type": "City", "name": "Le Gosier"}, {"@type": "City", "name": "Sainte-Anne"}, {"@type": "City", "name": "Saint-François"}, {"@type": "City", "name": "Le Moule"}, {"@type": "City", "name": "Morne-à-l'Eau"}, {"@type": "City", "name": "Petit-Canal"}, {"@type": "City", "name": "Port-Louis"}, {"@type": "City", "name": "Anse-Bertrand"}], "sameAs": ["https://www.instagram.com/sl_concept_btp/"], "founder": {"@type": "Person", "name": "Stephen Rounord"}, "foundingDate": "2024"}</script>
 </head>
 <body>
 <div class="jauge" id="jauge"></div>
@@ -275,6 +289,7 @@ footer a:hover{color:var(--lime)}
     <a class="mark" href="#haut">SL CONCEPT <span>BTP</span></a>
     <nav>
       <a href="#budget">Estimer mon budget</a>
+      <a href="#apropos">Qui sommes-nous</a>
       <a href="#methode">Méthode</a>
       <a href="#realisations">Réalisations</a>
       <a href="#avis">Avis clients</a>
@@ -436,6 +451,25 @@ footer a:hover{color:var(--lime)}
   </div>
 </section>
 
+<!-- ================= QUI SOMMES-NOUS ================= -->
+<section id="apropos">
+  <div class="wrap apropos">
+    <img src="/img/chantier-maison.jpg" alt="Maison livrée par SL CONCEPT BTP en Guadeloupe" loading="lazy">
+    <div>
+      <div class="titre"><h2>Qui sommes-nous</h2><div class="sous">une entreprise guadeloupéenne</div></div>
+      <div class="filet"></div>
+      <p>SL CONCEPT BTP est une entreprise de construction fondée en 2024 à Pointe-Noire par <b>Stephen Rounord</b>, son gérant.</p>
+      <p>Nous réalisons le gros œuvre et les travaux tous corps d'état : maisons individuelles, bungalows, piscines, clôtures, chemins d'accès, murs de soutènement et rénovations, partout en Guadeloupe.</p>
+      <p>Notre façon de travailler : un seul interlocuteur du premier appel à la remise des clés, des devis détaillés poste par poste, et des chantiers suivis de près.</p>
+      <ul class="apropos-faits">
+        <li><b>SAS</b> immatriculée · SIREN 984 677 278</li>
+        <li><b>Assurance décennale</b> tous corps d'état</li>
+        <li><b>Basée à Pointe-Noire</b>, intervention dans toute la Guadeloupe</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- ================= MÉTHODE ================= -->
 <section class="creme" id="methode">
   <div class="wrap">
@@ -492,6 +526,18 @@ footer a:hover{color:var(--lime)}
   </div>
 </section>
 
+<!-- ================= ZONE ================= -->
+<section class="creme" id="zone">
+  <div class="wrap">
+    <div class="titre"><h2>Zone d'intervention</h2><div class="sous">toute la Guadeloupe</div></div>
+    <div class="filet"></div>
+    <p class="intro">Basés à Pointe-Noire, nous intervenons sur l'ensemble de la Guadeloupe continentale.</p>
+    <h3 class="zone-t">Basse-Terre</h3><div class="communes"><span>Pointe-Noire</span><span>Deshaies</span><span>Bouillante</span><span>Vieux-Habitants</span><span>Baillif</span><span>Basse-Terre</span><span>Saint-Claude</span><span>Gourbeyre</span><span>Vieux-Fort</span><span>Trois-Rivières</span><span>Capesterre-Belle-Eau</span><span>Goyave</span><span>Petit-Bourg</span><span>Baie-Mahault</span><span>Lamentin</span><span>Sainte-Rose</span></div>
+    <h3 class="zone-t">Grande-Terre</h3><div class="communes"><span>Les Abymes</span><span>Pointe-à-Pitre</span><span>Le Gosier</span><span>Sainte-Anne</span><span>Saint-François</span><span>Le Moule</span><span>Morne-à-l'Eau</span><span>Petit-Canal</span><span>Port-Louis</span><span>Anse-Bertrand</span></div>
+    <p class="note" style="margin-top:1rem;color:var(--gris)">Marie-Galante, Les Saintes et La Désirade : sur étude, contactez-nous.</p>
+  </div>
+</section>
+
 <!-- ================= FAQ ================= -->
 <section>
   <div class="wrap" style="max-width:840px">
@@ -510,7 +556,7 @@ footer a:hover{color:var(--lime)}
 <section class="devis" id="devis">
   <div class="wrap">
     <div>
-      <div class="titre"><h2>Parlons de votre projet</h2><div class="sous">réponse sous 24 h ouvrées</div></div>
+      <div class="titre"><h2>Parlons de votre projet</h2><div class="sous">réponse sous 72 h</div></div>
       <div class="filet"></div>
       <p style="color:#DCE7D6;max-width:40ch">Décrivez les travaux en quelques lignes. Nous vous rappelons pour organiser la visite technique.</p>
       <div class="contacts">
@@ -538,11 +584,15 @@ footer a:hover{color:var(--lime)}
         </select>
       </div>
       <div><label for="msg">Votre projet</label><textarea id="msg" placeholder="Surface, longueur, délai souhaité, contraintes d'accès…"></textarea></div>
+      <div><label for="photos">Photos du terrain ou du chantier <span style="font-weight:400;opacity:.75">(facultatif, 3 max)</span></label>
+        <input id="photos" type="file" accept="image/*" multiple style="padding:.55rem;background:rgba(255,255,255,.06)">
+        <div id="apercu" style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap"></div></div>
       <div style="display:flex;flex-wrap:wrap;gap:.8rem;align-items:center">
         <button class="btn btn-lime" type="submit" id="btnEnvoi">Envoyer ma demande</button>
         <a class="btn btn-blanc" id="lienWa" href="#" style="padding:.85rem 1.4rem;font-size:.95rem">ou par WhatsApp</a>
       </div>
       <p class="note" id="note">Votre demande arrive directement chez SL CONCEPT BTP. Réponse sous 72 h.</p>
+      <p class="note" style="font-size:.78rem;opacity:.8">Vos données servent uniquement à traiter votre demande. <a href="/confidentialite.html" style="color:inherit">Politique de confidentialité</a>.</p>
     </form>
   </div>
 </section>
@@ -575,6 +625,7 @@ footer a:hover{color:var(--lime)}
       <li><a href="https://kaztravay.pro" target="_blank" rel="noopener">KazTravay — le marketplace des devis</a></li>
       <li>Pure Pro Net Caraïbes — nettoyage de chantier</li>
     </ul></div>
+    <div class="liens-legaux"><a href="/mentions-legales.html">Mentions légales</a><a href="/confidentialite.html">Politique de confidentialité</a></div>
     <div class="legal">SAS SL CONCEPT BTP · SIREN 984 677 278 · APE 4120B · Assurance décennale tous corps d'état · © <span id="annee"></span></div>
   </div>
 </footer>
@@ -712,6 +763,21 @@ function texteDemande(){
     '\nCommune : '+v('commune')+'\nType de projet : '+v('type')+
     '\n\nProjet :\n'+v('msg');
 }
+var PHOTOS=[];
+(function(){
+  var inp=document.getElementById('photos'),ap=document.getElementById('apercu');
+  function reduire(f){return new Promise(function(ok,ko){var u=URL.createObjectURL(f),im=new Image();
+    im.onload=function(){var M=1280,w=im.width,h=im.height,k=Math.min(1,M/Math.max(w,h));var c=document.createElement('canvas');
+      c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
+      ok(c.toDataURL('image/jpeg',0.72));};im.onerror=ko;im.src=u;});}
+  inp.addEventListener('change',function(){
+    var fs=[].slice.call(inp.files||[]).filter(function(f){return /^image\//.test(f.type);}).slice(0,3);
+    PHOTOS=[];ap.innerHTML='';
+    Promise.all(fs.map(reduire)).then(function(urls){urls.forEach(function(u){PHOTOS.push(u.split(',')[1]);
+      var i=document.createElement('img');i.src=u;i.style.cssText='width:64px;height:64px;object-fit:cover;border-radius:4px;border:2px solid var(--lime)';ap.appendChild(i);});})
+    .catch(function(){ap.textContent='Une photo n\u2019a pas pu être lue.';});
+  });
+})();
 function ouvrirWa(){window.open('https://wa.me/590690270977?text='+encodeURIComponent(texteDemande()),'_blank');}
 document.getElementById('lienWa').addEventListener('click',function(e){e.preventDefault();ouvrirWa();});
 document.getElementById('formDevis').addEventListener('submit',function(e){
@@ -722,10 +788,11 @@ document.getElementById('formDevis').addEventListener('submit',function(e){
   btn.disabled=true;btn.textContent='Envoi…';
   fetch('/api/devis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
     nom:v('nom'),tel:v('tel'),email:v('email'),commune:v('commune'),type:v('type'),msg:v('msg'),
-    estimation:(document.getElementById('montant')||{textContent:''}).textContent.replace(/\s+/g,' ').trim()})})
+    estimation:(document.getElementById('montant')||{textContent:''}).textContent.replace(/\s+/g,' ').trim(),
+    photos:PHOTOS.map(function(d){return {data:d};})})})
   .then(function(r){if(!r.ok)return r.text().then(function(t){throw t;});
     note.innerHTML='<strong>Merci, votre demande est bien envoyée.</strong> Nous vous rappelons sous 72 h.';
-    document.getElementById('formDevis').reset();btn.textContent='Demande envoyée ✓';})
+    document.getElementById('formDevis').reset();PHOTOS=[];document.getElementById('apercu').innerHTML='';btn.textContent='Demande envoyée ✓';})
   .catch(function(err){btn.disabled=false;btn.textContent='Envoyer ma demande';
     note.innerHTML='L\u2019envoi a échoué. Utilisez le bouton WhatsApp, ou appelez le <strong>0690 27 09 77</strong> ou le <strong>0690 59 50 42</strong>.';});
 });
