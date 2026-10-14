@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://www.slconceptbtp.pro/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
+<url><loc>https://www.slconceptbtp.pro/</loc></url>
+<url><loc>https://www.slconceptbtp.pro/qui-sommes-nous.html</loc></url>
+<url><loc>https://www.slconceptbtp.pro/avis.html</loc></url>
 </urlset>
