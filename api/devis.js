@@ -26,7 +26,8 @@ module.exports = async (req, res) => {
     from: 'Site SL CONCEPT BTP <devis@slconceptbtp.pro>', to: ['SLconcept-btp@outlook.com'],
     reply_to: emailOk ? email : undefined,
     subject: 'Demande de devis — ' + String(b.type || 'projet').slice(0, 80) + ' — ' + nom,
-    html, attachments: photos.length ? photos : undefined
+    html, text: 'Nouvelle demande de devis\n\n' + rows.map(r => r[0] + ' : ' + String(r[1]).slice(0, 3000)).join('\n'),
+    attachments: photos.length ? photos : undefined
   });
   if (!r.ok) { console.error('resend', r.status, await r.text()); return res.status(502).json({ ok: false }); }
   // accusé de réception au client (ne bloque pas la réponse en cas d'échec)
@@ -35,6 +36,7 @@ module.exports = async (req, res) => {
     const ar = await send({
       from: FROM, to: [email], reply_to: 'SLconcept-btp@outlook.com',
       subject: 'Nous avons bien reçu votre demande — SL CONCEPT BTP',
+      text: 'Bonjour ' + nom.split(' ')[0] + ',\n\nMerci pour votre demande de devis. Nous l\'avons bien reçue et nous vous rappelons sous 72 h.\n\nPour toute question : 0690 27 09 77 ou en répondant à cet e-mail.\n\nCordialement,\nSL CONCEPT BTP\nChemin de la Manioquerie, 97116 Pointe-Noire\nwww.slconceptbtp.pro',
       html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1B2620;line-height:1.55">
 <p>Bonjour ${prenom},</p>
 <p>Merci pour votre demande de devis${b.type ? ' (' + esc(String(b.type).slice(0, 80)) + ')' : ''}. Nous l'avons bien reçue et nous vous rappelons <b>sous 72 h</b> pour en parler et organiser la visite technique.</p>

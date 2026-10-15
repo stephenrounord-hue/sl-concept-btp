@@ -13,7 +13,8 @@ module.exports = async (req, res) => {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + process.env.RESEND_API_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({ from: 'Site SL CONCEPT BTP <devis@slconceptbtp.pro>', to: ['SLconcept-btp@outlook.com'],
-        subject: 'Nouvel avis ' + note + '/5 — ' + nom, html })
+        subject: 'Nouvel avis ' + note + '/5 — ' + nom, html,
+        text: 'Nouvel avis ' + note + '/5\n' + nom + (commune ? ' — ' + commune : '') + '\n\n' + texte })
     });
     if (!r.ok) { console.error('resend', r.status, await r.text()); return res.status(502).json({ ok: false }); }
     res.status(200).json({ ok: true });
