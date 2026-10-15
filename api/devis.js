@@ -15,10 +15,14 @@ module.exports = async (req, res) => {
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   // photos jointes (max 3, déjà compressées côté navigateur)
   const photos = (Array.isArray(b.photos) ? b.photos : []).slice(0, 3)
-    .filter(p => p && typeof p.data === 'string' && /^[A-Za-z0-9+/=]+$/.test(p.data) && p.data.length < 1500000)
-    .map((p, i) => ({ filename: 'photo-' + (i + 1) + '.jpg', content: p.data }));
+    .filter(p => p && typeof p.data === 'string' && /^[A-Za-z0-9+/=]+$/.test(p.data) && p.data.length < 4300000)
+    .map((p, i) => {
+      const pdf = p.type === 'application/pdf';
+      const base = String(p.nom || '').replace(/[^\w.\- ]+/g, '').replace(/\.[^.]*$/, '').slice(0, 60) || (pdf ? 'plan' : 'photo') + '-' + (i + 1);
+      return { filename: base + (pdf ? '.pdf' : '.jpg'), content: p.data };
+    });
   const rows = [['Nom', nom], ['Téléphone', tel], ['E-mail', email], ['Commune', b.commune], ['Type de projet', b.type],
-    ['Estimation du site', b.estimation], ['Projet', b.msg], ['Photos jointes', photos.length ? photos.length + ' photo(s) en pièce jointe' : '']].filter(r => r[1]);
+    ['Estimation du site', b.estimation], ['Projet', b.msg], ['Pièces jointes', photos.length ? photos.map(p => p.filename).join(', ') : '']].filter(r => r[1]);
   const html = '<h2>Nouvelle demande de devis</h2><table cellpadding="6" style="border-collapse:collapse;font-family:Arial">' +
     rows.map(r => `<tr><td style="color:#555"><b>${esc(r[0])}</b></td><td>${esc(String(r[1]).slice(0, 3000)).replace(/\n/g, '<br>')}</td></tr>`).join('') +
     '</table><p><a href="tel:' + esc(tel.replace(/\s/g, '')) + '">Rappeler ' + esc(tel) + '</a></p>';

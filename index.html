@@ -532,8 +532,8 @@ footer a:hover{color:var(--lime)}
         </select>
       </div>
       <div><label for="msg">Votre projet</label><textarea id="msg" placeholder="Surface, longueur, délai souhaité, contraintes d'accès…"></textarea></div>
-      <div><label for="photos">Photos du terrain ou du chantier <span style="font-weight:400;opacity:.75">(facultatif, 3 max)</span></label>
-        <input id="photos" type="file" accept="image/*" multiple style="padding:.55rem;background:rgba(255,255,255,.06)">
+      <div><label for="photos">Plans ou photos du terrain <span style="font-weight:400;opacity:.75">(facultatif : PDF, JPG, PNG — 3 fichiers max)</span></label>
+        <input id="photos" type="file" accept="image/*,application/pdf,.pdf" multiple style="padding:.55rem;background:rgba(255,255,255,.06)">
         <div id="apercu" style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap"></div></div>
       <div style="display:flex;flex-wrap:wrap;gap:.8rem;align-items:center">
         <button class="btn btn-lime" type="submit" id="btnEnvoi">Envoyer ma demande</button>
@@ -713,17 +713,26 @@ function texteDemande(){
 }
 var PHOTOS=[];
 (function(){
-  var inp=document.getElementById('photos'),ap=document.getElementById('apercu');
+  var inp=document.getElementById('photos'),ap=document.getElementById('apercu'),MAXPDF=3*1024*1024;
   function reduire(f){return new Promise(function(ok,ko){var u=URL.createObjectURL(f),im=new Image();
-    im.onload=function(){var M=1280,w=im.width,h=im.height,k=Math.min(1,M/Math.max(w,h));var c=document.createElement('canvas');
+    im.onload=function(){var M=1600,w=im.width,h=im.height,k=Math.min(1,M/Math.max(w,h));var c=document.createElement('canvas');
       c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
-      ok(c.toDataURL('image/jpeg',0.72));};im.onerror=ko;im.src=u;});}
+      var d=c.toDataURL('image/jpeg',0.75);ok({data:d.split(',')[1],nom:f.name.replace(/\.[^.]+$/,'')+'.jpg',type:'image/jpeg',apercu:d});};im.onerror=ko;im.src=u;});}
+  function lirePdf(f){return new Promise(function(ok,ko){var r=new FileReader();r.onload=function(){ok({data:String(r.result).split(',')[1],nom:f.name,type:'application/pdf'});};r.onerror=ko;r.readAsDataURL(f);});}
   inp.addEventListener('change',function(){
-    var fs=[].slice.call(inp.files||[]).filter(function(f){return /^image\//.test(f.type);}).slice(0,3);
+    var fs=[].slice.call(inp.files||[]).slice(0,3),err='';
     PHOTOS=[];ap.innerHTML='';
-    Promise.all(fs.map(reduire)).then(function(urls){urls.forEach(function(u){PHOTOS.push(u.split(',')[1]);
-      var i=document.createElement('img');i.src=u;i.style.cssText='width:64px;height:64px;object-fit:cover;border-radius:4px;border:2px solid var(--lime)';ap.appendChild(i);});})
-    .catch(function(){ap.textContent='Une photo n\u2019a pas pu être lue.';});
+    var taches=fs.map(function(f){
+      if(/^image\//.test(f.type))return reduire(f);
+      if(f.type==='application/pdf'||/\.pdf$/i.test(f.name)){
+        if(f.size>MAXPDF){err='Le fichier « '+f.name+' » dépasse 3 Mo : envoyez-le par WhatsApp ou à SLconcept-btp@outlook.com.';return Promise.resolve(null);}
+        return lirePdf(f);}
+      err='Format non accepté : '+f.name;return Promise.resolve(null);});
+    Promise.all(taches).then(function(res){res.forEach(function(x){if(!x)return;PHOTOS.push({data:x.data,nom:x.nom,type:x.type});
+      if(x.apercu){var i=document.createElement('img');i.src=x.apercu;i.style.cssText='width:64px;height:64px;object-fit:cover;border-radius:4px;border:2px solid var(--lime)';ap.appendChild(i);}
+      else{var t=document.createElement('span');t.textContent='📄 '+x.nom;t.style.cssText='display:inline-flex;align-items:center;padding:.4rem .7rem;border:2px solid var(--lime);border-radius:4px;font-size:.85rem;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';ap.appendChild(t);}});
+      if(err){var e=document.createElement('div');e.textContent=err;e.style.cssText='width:100%;font-size:.85rem;color:#F5B301';ap.appendChild(e);}})
+    .catch(function(){ap.textContent='Un fichier n\u2019a pas pu être lu.';});
   });
 })();
 function ouvrirWa(){window.open('https://wa.me/590690270977?text='+encodeURIComponent(texteDemande()),'_blank');}
@@ -733,11 +742,13 @@ document.getElementById('formDevis').addEventListener('submit',function(e){
   var v=function(id){return document.getElementById(id).value.trim();};
   var note=document.getElementById('note'),btn=document.getElementById('btnEnvoi');
   if(!v('nom')||!v('tel')){note.textContent='Merci de renseigner au moins votre nom et votre téléphone.';return;}
+  var poids=PHOTOS.reduce(function(t,p){return t+p.data.length;},0);
+  if(poids>4200000){note.textContent='Les fichiers joints sont trop lourds (4 Mo max au total). Retirez-en un ou envoyez-le par WhatsApp.';return;}
   btn.disabled=true;btn.textContent='Envoi…';
   fetch('/api/devis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
     nom:v('nom'),tel:v('tel'),email:v('email'),commune:v('commune'),type:v('type'),msg:v('msg'),
     estimation:(document.getElementById('montant')||{textContent:''}).textContent.replace(/\s+/g,' ').trim(),
-    photos:PHOTOS.map(function(d){return {data:d};})})})
+    photos:PHOTOS})})
   .then(function(r){if(!r.ok)return r.text().then(function(t){throw t;});
     note.innerHTML='<strong>Merci, votre demande est bien envoyée.</strong> Nous vous rappelons sous 72 h.';
     document.getElementById('formDevis').reset();PHOTOS=[];document.getElementById('apercu').innerHTML='';btn.textContent='Demande envoyée ✓';})
