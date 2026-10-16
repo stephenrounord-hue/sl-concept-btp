@@ -274,6 +274,12 @@ footer a:hover{color:var(--lime)}
 .zone-t{font-family:"Fira Sans Condensed";font-size:1.15rem;margin:1.2rem 0 .6rem;color:var(--navy)}
 .communes{display:flex;flex-wrap:wrap;gap:.45rem}
 .communes span{background:#fff;border:1px solid var(--bord);border-radius:30px;padding:.35rem .85rem;font-size:.92rem}
+.carte{position:relative;margin:1.6rem 0 .4rem;border-radius:8px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);background:#e8ece4;aspect-ratio:16/9}
+.carte iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media(max-width:700px){.carte{aspect-ratio:4/5}}
+.carte-aide{font-size:.9rem;color:#6E7A72;margin:.2rem 0 .4rem}
+.communes button{font:inherit;background:#fff;border:1px solid var(--bord);border-radius:30px;padding:.35rem .85rem;font-size:.92rem;cursor:pointer;color:inherit}
+.communes button:hover,.communes button.on{background:var(--vert);border-color:var(--vert);color:#fff}
 .liens-legaux{grid-column:1/-1;font-size:.85rem;margin-top:.6rem}
 .liens-legaux a{color:#8FA0BE;margin-right:1.2rem}
 </style>
@@ -306,8 +312,10 @@ footer a:hover{color:var(--lime)}
     <div class="titre"><h2>Zone d'intervention</h2><div class="sous">toute la Guadeloupe</div></div>
     <div class="filet"></div>
     <p class="intro">Basés à Pointe-Noire, nous intervenons sur l'ensemble de la Guadeloupe continentale.</p>
-    <h3 class="zone-t">Basse-Terre</h3><div class="communes"><span>Pointe-Noire</span><span>Deshaies</span><span>Bouillante</span><span>Vieux-Habitants</span><span>Baillif</span><span>Basse-Terre</span><span>Saint-Claude</span><span>Gourbeyre</span><span>Vieux-Fort</span><span>Trois-Rivières</span><span>Capesterre-Belle-Eau</span><span>Goyave</span><span>Petit-Bourg</span><span>Baie-Mahault</span><span>Lamentin</span><span>Sainte-Rose</span></div>
-    <h3 class="zone-t">Grande-Terre</h3><div class="communes"><span>Les Abymes</span><span>Pointe-à-Pitre</span><span>Le Gosier</span><span>Sainte-Anne</span><span>Saint-François</span><span>Le Moule</span><span>Morne-à-l'Eau</span><span>Petit-Canal</span><span>Port-Louis</span><span>Anse-Bertrand</span></div>
+    <div class="carte"><iframe id="carteG" title="Carte de la zone d'intervention de SL CONCEPT BTP en Guadeloupe" src="https://maps.google.com/maps?q=Pointe-Noire%2C%20Guadeloupe&amp;ll=16.18,-61.55&amp;z=10&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
+    <p class="carte-aide">Le repère indique notre siège à Pointe-Noire. Touchez une commune ci-dessous pour la voir sur la carte.</p>
+    <h3 class="zone-t">Basse-Terre</h3><div class="communes"><button type="button">Pointe-Noire</button><button type="button">Deshaies</button><button type="button">Bouillante</button><button type="button">Vieux-Habitants</button><button type="button">Baillif</button><button type="button">Basse-Terre</button><button type="button">Saint-Claude</button><button type="button">Gourbeyre</button><button type="button">Vieux-Fort</button><button type="button">Trois-Rivières</button><button type="button">Capesterre-Belle-Eau</button><button type="button">Goyave</button><button type="button">Petit-Bourg</button><button type="button">Baie-Mahault</button><button type="button">Lamentin</button><button type="button">Sainte-Rose</button></div>
+    <h3 class="zone-t">Grande-Terre</h3><div class="communes"><button type="button">Les Abymes</button><button type="button">Pointe-à-Pitre</button><button type="button">Le Gosier</button><button type="button">Sainte-Anne</button><button type="button">Saint-François</button><button type="button">Le Moule</button><button type="button">Morne-à-l'Eau</button><button type="button">Petit-Canal</button><button type="button">Port-Louis</button><button type="button">Anse-Bertrand</button></div>
     <p class="note" style="margin-top:1rem;color:var(--gris)">Marie-Galante, Les Saintes et La Désirade : sur étude, contactez-nous.</p>
   </div>
 </section>
@@ -366,5 +374,12 @@ document.querySelectorAll('.rev').forEach(function(el){el.classList.add('vu');})
 
 </script>
 <script src="/rappel.js" defer></script>
+<script>
+(function(){var c=document.getElementById('carteG');if(!c)return;
+document.querySelectorAll('.communes button').forEach(function(b){b.addEventListener('click',function(){
+document.querySelectorAll('.communes button.on').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+c.src='https://maps.google.com/maps?q='+encodeURIComponent(b.textContent+', Guadeloupe')+'&z=13&output=embed';
+c.scrollIntoView({behavior:'smooth',block:'center'});});});})();
+</script>
 </body>
 </html>
