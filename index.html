@@ -185,6 +185,26 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;background:var(--lime
 .vue{position:relative;aspect-ratio:4/3;background:var(--bord);overflow:hidden;margin:0;border-radius:4px}
 .vue img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
 .vue:hover img{transform:scale(1.05)}
+.carrou{position:relative;margin-top:1.6rem}
+.car-piste{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.car-piste::-webkit-scrollbar{display:none}
+.car-piste .vue{flex:0 0 calc((100% - 32px)/3);scroll-snap-align:start;cursor:zoom-in}
+.car-fl{position:absolute;top:50%;transform:translateY(-60%);z-index:3;width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.95);color:var(--vert);font-size:2rem;line-height:1;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);display:grid;place-items:center;padding-bottom:4px}
+.car-fl.g{left:-14px}.car-fl.d{right:-14px}
+.car-fl:hover{background:var(--vert);color:#fff}
+.car-aide{text-align:center;font-size:.9rem;color:#6E7A72;margin-top:.8rem}
+@media(max-width:900px){.car-piste .vue{flex-basis:calc((100% - 16px)/2)}}
+@media(max-width:600px){.car-piste .vue{flex-basis:84%}.car-fl{display:none}}
+#lb{position:fixed;inset:0;z-index:9999;background:rgba(5,15,10,.94);display:none;align-items:center;justify-content:center;flex-direction:column;padding:56px 12px 20px}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:calc(100vh - 140px);object-fit:contain;border-radius:4px;box-shadow:0 10px 40px rgba(0,0,0,.5);user-select:none}
+#lb .lb-cap{color:#fff;font-family:"Fira Sans Condensed";font-weight:600;font-size:1.05rem;margin-top:14px;text-align:center}
+#lb .lb-cap span{opacity:.6;font-weight:400;margin-left:.6rem}
+#lb button{position:absolute;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;border-radius:50%;width:52px;height:52px;font-size:2rem;line-height:1;display:grid;place-items:center}
+#lb button:hover{background:rgba(255,255,255,.25)}
+#lb .lb-x{top:12px;right:12px;font-size:1.6rem}
+#lb .lb-g{left:14px;top:50%;transform:translateY(-50%)}#lb .lb-d{right:14px;top:50%;transform:translateY(-50%)}
+@media(max-width:600px){#lb .lb-g,#lb .lb-d{top:auto;bottom:14px;transform:none;width:46px;height:46px}}
 .vue .vide{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-family:"Fira Sans Condensed";font-weight:600;font-size:.95rem;color:#6E7A72;padding:1rem;background:repeating-linear-gradient(45deg,#E6EADF 0 12px,#DDE3D6 12px 24px)}
 .vue figcaption{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(31,74,52,.94));color:#fff;font-family:"Fira Sans Condensed";font-weight:600;font-size:1rem;padding:2.2rem .9rem .8rem}
 
@@ -474,14 +494,24 @@ footer a:hover{color:var(--lime)}
     <div class="titre"><h2>Réalisations</h2><div class="sous">nos chantiers en Guadeloupe</div></div>
     <div class="filet"></div>
     <p class="intro">L'avancement au quotidien est publié sur <a href="https://www.instagram.com/sl_concept_btp/" target="_blank" rel="noopener" style="color:var(--vert);font-weight:600">Instagram</a>.</p>
-    <div class="grille">
-      <figure class="vue"><img src="/img/photo-2.jpg" alt="Villa individuelle réalisée par SL CONCEPT BTP, vue mer"><figcaption>Maison individuelle — livraison</figcaption></figure>
-      <figure class="vue"><img src="/img/photo-3.jpg" alt="Piscine à débordement réalisée par SL CONCEPT BTP"><figcaption>Piscine à débordement</figcaption></figure>
-      <figure class="vue"><img src="/img/photo-4.jpg" alt="Clôture rigide et portillon posés par SL CONCEPT BTP"><figcaption>Clôture rigide et portillon</figcaption></figure>
-      <figure class="vue"><img src="/img/photo-5.jpg" alt="Carrelage salle d'eau et extérieur par SL CONCEPT BTP"><figcaption>Carrelage — intérieur et extérieur</figcaption></figure>
-      <figure class="vue"><img src="/img/photo-6.jpg" alt="Muret béton avant et après rénovation par SL CONCEPT BTP"><figcaption>Muret béton — avant / après</figcaption></figure>
-      <figure class="vue"><img src="/img/photo-7.jpg" alt="Chantier en cours, structure et charpente SL CONCEPT BTP"><figcaption>Chantier en cours — structure</figcaption></figure>
+    <div class="carrou">
+      <button class="car-fl g" type="button" aria-label="Photo précédente">‹</button>
+      <div class="car-piste" id="carPiste">
+      <figure class="vue" data-i="0"><img src="/img/real-01-maison-mini.jpg" data-grand="/img/real-01-maison.jpg" alt="Maison individuelle livrée par SL CONCEPT BTP, vue mer" loading="lazy"><figcaption>Maison individuelle — livraison</figcaption></figure>
+      <figure class="vue" data-i="1"><img src="/img/real-02-piscine-mini.jpg" data-grand="/img/real-02-piscine.jpg" alt="Piscine à débordement réalisée par SL CONCEPT BTP" loading="lazy"><figcaption>Piscine à débordement</figcaption></figure>
+      <figure class="vue" data-i="2"><img src="/img/real-03-duplex-mini.jpg" data-grand="/img/real-03-duplex.jpg" alt="Logements en duplex construits par SL CONCEPT BTP" loading="lazy"><figcaption>Logements en duplex</figcaption></figure>
+      <figure class="vue" data-i="3"><img src="/img/real-04-maison-2-mini.jpg" data-grand="/img/real-04-maison-2.jpg" alt="Maison de plain-pied construite par SL CONCEPT BTP" loading="lazy"><figcaption>Maison plain-pied — volets et jalousies</figcaption></figure>
+      <figure class="vue" data-i="4"><img src="/img/real-05-bungalow-bois-mini.jpg" data-grand="/img/real-05-bungalow-bois.jpg" alt="Bungalows en bois sur dalle béton par SL CONCEPT BTP" loading="lazy"><figcaption>Bungalows bois</figcaption></figure>
+      <figure class="vue" data-i="5"><img src="/img/real-06-cloture-mini.jpg" data-grand="/img/real-06-cloture.jpg" alt="Clôture rigide et portillon posés par SL CONCEPT BTP" loading="lazy"><figcaption>Clôture rigide et portillon</figcaption></figure>
+      <figure class="vue" data-i="6"><img src="/img/real-07-mur-avant-apres-mini.jpg" data-grand="/img/real-07-mur-avant-apres.jpg" alt="Mur de clôture rénové, avant et après, par SL CONCEPT BTP" loading="lazy"><figcaption>Mur de clôture — avant / après</figcaption></figure>
+      <figure class="vue" data-i="7"><img src="/img/real-08-carrelage-mini.jpg" data-grand="/img/real-08-carrelage.jpg" alt="Carrelage de salles d'eau et mur extérieur par SL CONCEPT BTP" loading="lazy"><figcaption>Carrelage — salles d'eau et extérieur</figcaption></figure>
+      <figure class="vue" data-i="8"><img src="/img/real-09-mur-pierre-mini.jpg" data-grand="/img/real-09-mur-pierre.jpg" alt="Mur habillé de pierre avec lame d'eau par SL CONCEPT BTP" loading="lazy"><figcaption>Mur en pierre et lame d'eau</figcaption></figure>
+      <figure class="vue" data-i="9"><img src="/img/real-10-chantier-structure-mini.jpg" data-grand="/img/real-10-chantier-structure.jpg" alt="Chantier en cours, structure béton et charpente bois" loading="lazy"><figcaption>Chantier en cours — structure et charpente</figcaption></figure>
+      <figure class="vue" data-i="10"><img src="/img/real-11-reunion-chantier-mini.jpg" data-grand="/img/real-11-reunion-chantier.jpg" alt="Bureau de chantier avec les plans affichés" loading="lazy"><figcaption>Réunion de chantier — suivi des plans</figcaption></figure>
+      </div>
+      <button class="car-fl d" type="button" aria-label="Photo suivante">›</button>
     </div>
+    <p class="car-aide">Faites défiler ou touchez une photo pour l'agrandir</p>
   </div>
 </section>
 
@@ -763,6 +793,53 @@ document.getElementById('formDevis').addEventListener('submit',function(e){
   b.addEventListener('click',function(){var o=bar.classList.toggle('ouvert');b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Fermer le menu':'Ouvrir le menu');});
   bar.querySelectorAll('nav a').forEach(function(a){a.addEventListener('click',fermer);});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')fermer();});
+})();
+</script>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Photo agrandie"><button class="lb-x" type="button" aria-label="Fermer">✕</button><button class="lb-g" type="button" aria-label="Précédente">‹</button><img alt=""><div class="lb-cap"></div><button class="lb-d" type="button" aria-label="Suivante">›</button></div>
+<script>
+(function(){
+  var piste=document.getElementById('carPiste'); if(!piste) return;
+  var figs=[].slice.call(piste.querySelectorAll('.vue')), car=piste.parentNode;
+  function pas(){return figs[0].getBoundingClientRect().width+16}
+  function avance(d){
+    var max=piste.scrollWidth-piste.clientWidth-4;
+    if(d>0&&piste.scrollLeft>=max) piste.scrollLeft=0;
+    else if(d<0&&piste.scrollLeft<=4) piste.scrollLeft=max+4;
+    else piste.scrollBy({left:d*pas()});
+  }
+  car.querySelector('.car-fl.g').onclick=function(){avance(-1)};
+  car.querySelector('.car-fl.d').onclick=function(){avance(1)};
+  // défilement automatique, en pause au survol / toucher / visionneuse ouverte
+  var pause=false, minuterie;
+  function relance(){clearTimeout(minuterie);minuterie=setTimeout(function(){pause=false},6000)}
+  ['mouseenter','touchstart','focusin'].forEach(function(e){car.addEventListener(e,function(){pause=true;clearTimeout(minuterie)},{passive:true})});
+  car.addEventListener('mouseleave',function(){pause=false});
+  car.addEventListener('touchend',relance,{passive:true});
+  var reduit=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduit) setInterval(function(){
+    var r=piste.getBoundingClientRect();
+    if(!pause&&!lb.classList.contains('on')&&!document.hidden&&r.top<innerHeight&&r.bottom>0) avance(1);
+  },3500);
+  // visionneuse
+  var lb=document.getElementById('lb'), im=lb.querySelector('img'), cap=lb.querySelector('.lb-cap'), cur=0;
+  function montre(i){
+    cur=(i+figs.length)%figs.length; var f=figs[cur], src=f.querySelector('img');
+    im.src=src.getAttribute('data-grand'); im.alt=src.alt;
+    cap.innerHTML=f.querySelector('figcaption').textContent+'<span>'+(cur+1)+' / '+figs.length+'</span>';
+    var n=figs[(cur+1)%figs.length].querySelector('img'); (new Image()).src=n.getAttribute('data-grand');
+  }
+  function ouvre(i){montre(i);lb.classList.add('on');document.body.style.overflow='hidden'}
+  function ferme(){lb.classList.remove('on');document.body.style.overflow=''}
+  figs.forEach(function(f,i){f.addEventListener('click',function(){ouvre(i)})});
+  lb.querySelector('.lb-x').onclick=ferme;
+  lb.querySelector('.lb-g').onclick=function(e){e.stopPropagation();montre(cur-1)};
+  lb.querySelector('.lb-d').onclick=function(e){e.stopPropagation();montre(cur+1)};
+  lb.addEventListener('click',function(e){if(e.target===lb)ferme()});
+  document.addEventListener('keydown',function(e){if(!lb.classList.contains('on'))return;
+    if(e.key==='Escape')ferme(); else if(e.key==='ArrowLeft')montre(cur-1); else if(e.key==='ArrowRight')montre(cur+1)});
+  var x0=null;
+  lb.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  lb.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)montre(cur+(dx<0?1:-1));x0=null},{passive:true});
 })();
 </script>
 <script src="/rappel.js" defer></script>
