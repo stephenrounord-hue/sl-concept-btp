@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
     rows.map(r => `<tr><td style="color:#555"><b>${esc(r[0])}</b></td><td>${esc(String(r[1]).slice(0, 3000)).replace(/\n/g, '<br>')}</td></tr>`).join('') +
     '</table><p><a href="tel:' + esc(tel.replace(/\s/g, '')) + '">Rappeler ' + esc(tel) + '</a></p>';
   const r = await send({
-    from: 'Site SL CONCEPT BTP <devis@slconceptbtp.pro>', to: ['SLconcept-btp@outlook.com'],
+    from: 'Site SL CONCEPT BTP <devis@slconceptbtp.pro>', to: ['slconcept-btp@outlook.com'],
     reply_to: emailOk ? email : undefined,
     subject: 'Demande de devis — ' + String(b.type || 'projet').slice(0, 80) + ' — ' + nom,
     html, text: 'Nouvelle demande de devis\n\n' + rows.map(r => r[0] + ' : ' + String(r[1]).slice(0, 3000)).join('\n'),
@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
   if (emailOk) {
     const prenom = esc(nom.split(' ')[0]);
     const ar = await send({
-      from: FROM, to: [email], reply_to: 'SLconcept-btp@outlook.com',
+      from: FROM, to: [email], reply_to: 'slconcept-btp@outlook.com',
       subject: 'Nous avons bien reçu votre demande — SL CONCEPT BTP',
       text: 'Bonjour ' + nom.split(' ')[0] + ',\n\nMerci pour votre demande de devis. Nous l\'avons bien reçue et nous vous rappelons sous 72 h.\n\nPour toute question : 0690 27 09 77 ou en répondant à cet e-mail.\n\nCordialement,\nSL CONCEPT BTP\nChemin de la Manioquerie, 97116 Pointe-Noire\nwww.slconceptbtp.pro',
       html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1B2620;line-height:1.55">

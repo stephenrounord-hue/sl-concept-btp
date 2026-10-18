@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + process.env.RESEND_API_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Site SL CONCEPT BTP <devis@slconceptbtp.pro>', to: ['SLconcept-btp@outlook.com'],
+        from: 'Site SL CONCEPT BTP <devis@slconceptbtp.pro>', to: ['slconcept-btp@outlook.com'],
         subject: 'À rappeler (' + creneau + ') — ' + (nom || tel),
         text: 'Demande de rappel\n\n' + (nom || 'Client') + '\n' + tel + '\nCréneau : ' + creneau,
         html: `<h2>Demande de rappel</h2><p style="font-size:18px"><b>${esc(nom || 'Client')}</b><br>
