@@ -397,7 +397,8 @@ footer a:hover{color:var(--lime)}
           <option value="horssol">Piscine hors-sol avec deck</option>
           <option value="dalle">Dalle béton / fondations</option>
           <option value="carrelage">Carrelage posé</option>
-          <option value="maison">Maison individuelle — gros œuvre</option>
+          <option value="maison">Maison individuelle — gros œuvre + toiture</option>
+          <option value="maison_cle">Maison individuelle — clés en main</option>
           <option value="bungalow">Bungalow / studio annexe</option>
           <option value="renovation">Rénovation second œuvre</option>
           <option value="surelevation">Surélévation de maison</option>
@@ -635,15 +636,16 @@ if ('IntersectionObserver' in window){
 
 /* ===== ESTIMATEUR — barème modifiable ici (prix TTC, TVA 8,5 % incluse) ===== */
 var BAREME={
- rigide:{nom:"Clôture rigide posée",unite:"ml",min:5,max:200,def:40,bas:80,haut:110,postes:["Semelles et poteaux béton","Panneaux rigides fournis et posés"]},
+ rigide:{nom:"Clôture rigide posée",unite:"ml",min:5,max:200,def:40,bas:75,haut:95,postes:["Semelles et poteaux béton","Panneaux rigides fournis et posés"]},
  muret:{nom:"Muret béton + pare-vue",unite:"ml",min:5,max:120,def:30,bas:380,haut:520,postes:["Semelle filante BA + agglos 20","Chaînages et enduit taloché","Poteaux et panneaux pare-vue"]},
  muretseul:{nom:"Muret maçonné enduit (H 1 m)",unite:"ml",min:5,max:150,def:30,bas:240,haut:340,postes:["Semelle filante ferraillée","Agglos 20, chaînages HA","Enduit taloché deux faces"]},
  grillage:{nom:"Grillage simple torsion",unite:"ml",min:10,max:300,def:50,bas:50,haut:70,postes:["Poteaux scellés","Grillage tendu et jambes de force"]},
- piscine:{nom:"Piscine béton banché",unite:"m²",min:8,max:60,def:18,bas:1150,haut:1650,postes:["Terrassement et structure béton","Étanchéité et revêtement","Local technique et filtration"]},
+ piscine:{nom:"Piscine béton banché",unite:"m²",min:8,max:60,def:18,bas:1100,haut:1550,postes:["Terrassement et structure béton","Étanchéité et revêtement","Local technique et filtration"]},
  horssol:{nom:"Piscine hors-sol avec deck",unite:"m²",min:8,max:40,def:10,bas:900,haut:1500,postes:["Structure et bassin","Deck bois et margelles","Filtration et éclairage"]},
- dalle:{nom:"Dalle béton / fondations",unite:"m²",min:10,max:300,def:60,bas:170,haut:280,postes:["Décaissement et hérisson","Ferraillage et coulage","Finition talochée"]},
+ dalle:{nom:"Dalle béton / fondations",unite:"m²",min:10,max:300,def:60,bas:150,haut:230,postes:["Décaissement et hérisson","Ferraillage et coulage","Finition talochée"]},
  carrelage:{nom:"Carrelage posé",unite:"m²",min:10,max:300,def:40,bas:70,haut:110,postes:["Préparation du support","Pose et joints","Plinthes et finitions"]},
- maison:{nom:"Maison individuelle — gros œuvre",unite:"m²",min:40,max:250,def:90,bas:950,haut:1400,postes:["Fondations et dallage","Élévation, chaînages, planchers","Charpente et couverture"]},
+ maison:{nom:"Maison individuelle — gros œuvre + toiture",unite:"m²",min:40,max:250,def:90,bas:850,haut:1100,postes:["Fondations et dallage","Élévation, chaînages, enduits","Charpente et couverture"]},
+ maison_cle:{nom:"Maison individuelle — clés en main",unite:"m²",min:40,max:250,def:90,bas:1500,haut:1900,postes:["Gros œuvre et toiture","Menuiseries, électricité, plomberie, chauffe-eau solaire","Carrelage, plafonds, peinture"]},
  bungalow:{nom:"Bungalow / studio annexe",unite:"m²",min:15,max:80,def:30,bas:1200,haut:1700,postes:["Fondations adaptées petite emprise","Structure et couverture","Second œuvre de base"]},
  renovation:{nom:"Rénovation second œuvre",unite:"m²",min:15,max:150,def:50,bas:350,haut:600,postes:["Dépose et préparation des supports","Cloisons, peinture, sols","Finitions salle d'eau / cuisine"]},
  surelevation:{nom:"Surélévation de maison",unite:"m²",min:20,max:150,def:50,bas:1100,haut:1600,postes:["Renforcement de structure existante","Élévation et chaînages","Charpente et couverture"]},
@@ -661,7 +663,7 @@ var BAREME={
  carport:{nom:"Carport / garage",unite:"m²",min:12,max:80,def:20,bas:450,haut:800,postes:["Plots et dalle béton","Structure porteuse","Couverture"]}
 };
 var DELAI={rigide:[3,.15],muret:[4,.35],muretseul:[3,.25],grillage:[2,.08],piscine:[35,1.2],horssol:[10,.8],dalle:[4,.2],carrelage:[3,.25],
- maison:[60,1.2],bungalow:[30,1.5],renovation:[7,.5],surelevation:[40,1],terrassement:[2,.08],chemin:[3,.3],reparation_ba:[3,.6],portail:[3,1.5],
+ maison:[30,.6],maison_cle:[80,.9],bungalow:[30,1.5],renovation:[7,.5],surelevation:[40,1],terrassement:[2,.08],chemin:[3,.3],reparation_ba:[3,.6],portail:[3,1.5],
  piscine_coque:[10,.8],soutenement:[7,.5],extension:[25,1.5],terrasse:[3,.25],plots:[2,.4],demolition_p:[2,.1],assainissement:[5,2],carport:[6,.7]};
 var elProjet=document.getElementById('projet'),elQte=document.getElementById('qte'),
     elVal=document.getElementById('valQte'),elLbl=document.getElementById('lblQte'),
@@ -716,7 +718,7 @@ var CORRESPONDANCE={
   rigide:"Clôture", muret:"Clôture", muretseul:"Clôture", grillage:"Clôture", portail:"Clôture",
   piscine:"Piscine", horssol:"Piscine", piscine_coque:"Piscine",
   dalle:"Chemin d'accès / terrassement", carrelage:"Rénovation tous corps d'état",
-  maison:"Maison individuelle / bungalow", bungalow:"Maison individuelle / bungalow",
+  maison:"Maison individuelle / bungalow", maison_cle:"Maison individuelle / bungalow", bungalow:"Maison individuelle / bungalow",
   renovation:"Rénovation tous corps d'état", surelevation:"Maison individuelle / bungalow",
   terrassement:"Chemin d'accès / terrassement", chemin:"Chemin d'accès / terrassement",
   reparation_ba:"Réparation béton armé",
