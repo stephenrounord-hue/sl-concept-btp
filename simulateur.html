@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulateur prix construction Guadeloupe — SL CONCEPT BTP</title>
+<meta name="description" content="Simulateur gratuit : estimez en 30 secondes le prix de votre maison, piscine, clôture, dalle ou extension en Guadeloupe. Prix TTC réels, TVA DOM 8,5 % comprise.">
+<meta property="og:title" content="Simulateur prix construction Guadeloupe — SL CONCEPT BTP">
+<meta property="og:description" content="Estimez votre budget en 30 secondes : maison, piscine, clôture, dalle… Devis gratuit.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@500;600;700;800&family=Fira+Sans:wght@400;500;600&family=Yellowtail&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#213971; --navy-fonce:#16264C; --bleu:#265BA0;
+  --vert:#4C8B33; --vert-fonce:#2A6B4C; --vert-nuit:#1F4A34;
+  --lime:#A8CC5B; --lime-clair:#BEDC7C;
+  --encre:#1B2620; --gris:#5C6A63; --creme:#F3F5F0; --bord:#DCE2D8;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#fff;color:var(--encre);font-family:"Fira Sans",system-ui,sans-serif;font-size:1.0625rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.cd{font-family:"Fira Sans Condensed",Impact,sans-serif;font-weight:800;letter-spacing:-.005em;line-height:1.02;margin:0}
+.script{font-family:Yellowtail,cursive;font-weight:400;letter-spacing:0}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{width:min(1180px,92vw);margin-inline:auto}
+section{padding:clamp(3.2rem,8vw,6rem) 0}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+.jauge{position:fixed;top:0;left:0;height:3px;background:var(--lime);z-index:90;width:0}
+
+/* ---------- header ---------- */
+.bar{position:sticky;top:0;z-index:60;background:#fff;border-bottom:3px solid var(--lime);box-shadow:0 2px 14px rgba(0,0,0,.06)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.65rem 0}
+.mark{white-space:nowrap;font-family:"Fira Sans Condensed";font-weight:800;font-size:1.45rem;text-decoration:none;color:var(--navy);letter-spacing:-.01em}
+.mark span{color:var(--vert)}
+.bar nav{display:flex;gap:1.1rem;font-family:"Fira Sans Condensed";font-weight:600;font-size:1.02rem}
+.bar nav a{white-space:nowrap;text-decoration:none;color:var(--encre);padding-bottom:2px;border-bottom:2px solid transparent}
+.bar nav a:hover{color:var(--vert);border-color:var(--lime)}
+.tel{font-family:"Fira Sans Condensed";font-weight:700;font-size:1.05rem;text-decoration:none;background:var(--vert);color:#fff;padding:.55rem 1.1rem;border-radius:3px;white-space:nowrap;transition:.2s}
+@media(max-width:1350px){.tel2{display:none}}
+.delai{margin:.7rem 0 0;font-family:"Fira Sans Condensed";font-weight:700;color:var(--lime)}
+#etoiles button{background:none;border:0;padding:0;cursor:pointer;color:rgba(255,255,255,.28);font-size:inherit;transition:.15s}
+#etoiles button.on{color:#F5B301}
+.avis-carte{background:#fff;border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1rem;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.avis-carte .st{color:#F5B301;font-size:1.25rem;letter-spacing:.1em}
+.avis-carte .qui{font-family:"Fira Sans Condensed";font-weight:700;margin-top:.5rem}
+.avis-carte .qui span{font-weight:400;color:#666;font-family:"Fira Sans"}
+.tel:hover{background:var(--vert-fonce)}
+.burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:10px;background:var(--vert);border:0;border-radius:4px;cursor:pointer;flex:none}
+.burger span{display:block;height:3px;width:100%;background:#fff;border-radius:2px;transition:.25s}
+.bar.ouvert .burger span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.bar.ouvert .burger span:nth-child(2){opacity:0}
+.bar.ouvert .burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+@media(max-width:1100px){
+ .burger{display:flex}
+ .bar .mark{margin-right:auto}
+ .bar nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;background:#fff;border-bottom:3px solid var(--lime);box-shadow:0 12px 24px rgba(0,0,0,.12);padding:.4rem 0}
+ .bar.ouvert nav{display:flex}
+ .bar nav a{padding:1rem 6vw;border-bottom:1px solid #eee;font-size:1.15rem}
+ .bar nav a:last-child{border-bottom:0;color:var(--vert)}
+}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:min(88vh,760px);display:flex;align-items:flex-end;color:#fff;overflow:hidden}
+.hero .fond{position:absolute;inset:0;background:url('/img/photo-1.jpg') center 40%/cover no-repeat;transform:scale(1.02)}
+.hero .voile{position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(22,38,76,.55) 0%,rgba(22,38,76,.2) 30%,rgba(20,52,36,.92) 100%),
+  linear-gradient(90deg,rgba(15,34,24,.62) 0%,rgba(15,34,24,.12) 62%,transparent 100%)}
+.hero .wrap{position:relative;z-index:2;padding:clamp(3rem,10vw,6rem) 0 clamp(2rem,5vw,3.4rem)}
+.hero h1{font-size:clamp(2.6rem,7vw,4.8rem);text-shadow:0 2px 22px rgba(0,0,0,.35);max-width:16ch;text-transform:uppercase}
+.hero h1 em{font-style:normal;color:var(--lime);display:block}
+.hero .tag{font-family:Yellowtail,cursive;font-size:clamp(1.4rem,3.2vw,2.1rem);color:var(--lime);margin:0 0 .45rem;text-shadow:0 2px 18px rgba(0,0,0,.4)}
+.hero .lede{max-width:46ch;font-size:clamp(1rem,2vw,1.16rem);margin:1.1rem 0 1.9rem;color:#EAF1E6;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.actions{display:flex;flex-wrap:wrap;gap:.8rem}
+.btn{font-family:"Fira Sans Condensed";font-weight:700;font-size:1.1rem;text-decoration:none;padding:.85rem 1.7rem;border:2px solid transparent;border-radius:3px;display:inline-block;transition:.2s;cursor:pointer}
+.btn-lime{background:var(--lime);color:var(--vert-nuit)}
+.btn-lime:hover{background:var(--lime-clair);transform:translateY(-2px)}
+.btn-vert{background:var(--vert);color:#fff}
+.btn-vert:hover{background:var(--vert-fonce)}
+.btn-blanc{border-color:#fff;color:#fff}
+.btn-blanc:hover{background:#fff;color:var(--vert-nuit)}
+
+/* ---------- bandeau services (comme le flyer) ---------- */
+.bande{background:linear-gradient(100deg,var(--vert) 0%,var(--vert-fonce) 100%);color:#fff}
+.bande .wrap{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(255,255,255,.22)}
+@media(max-width:860px){.bande .wrap{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:460px){.bande .wrap{grid-template-columns:1fr}}
+.bs{background:linear-gradient(100deg,var(--vert),var(--vert-fonce));padding:1.5rem 1.1rem;text-align:center}
+.bs b{display:block;font-family:"Fira Sans Condensed";font-weight:700;font-size:1.22rem}
+.bs span{font-size:.9rem;color:#DDEBD0}
+
+/* ---------- preuves ---------- */
+.preuves{background:var(--navy);color:#D5DEF2}
+.preuves .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+@media(max-width:820px){.preuves .wrap{grid-template-columns:repeat(2,1fr)}}
+.pv{padding:1.5rem 1.3rem;border-left:1px solid rgba(255,255,255,.16)}
+.pv:first-child{border-left:0;padding-left:0}
+@media(max-width:820px){.pv:nth-child(3){border-left:0}}
+.pv b{display:block;font-family:"Fira Sans Condensed";font-weight:800;font-size:1.7rem;color:var(--lime)}
+.pv span{font-size:.92rem;line-height:1.45;display:block}
+
+/* ---------- titres ---------- */
+.titre{margin-bottom:1.2rem}
+.titre h2{font-size:clamp(1.9rem,4.6vw,3rem);text-transform:uppercase}
+.titre .sous{font-family:Yellowtail,cursive;font-size:clamp(1.2rem,2.6vw,1.7rem);color:var(--vert);margin-top:.1rem}
+.sombre .titre .sous,.vertbg .titre .sous{color:var(--lime)}
+.filet{width:74px;height:4px;background:var(--lime);margin:.9rem 0 1.6rem}
+.intro{max-width:62ch;color:var(--gris);margin:0 0 2.6rem}
+.sombre .intro,.vertbg .intro{color:#DCE7D6}
+
+/* ---------- problème ---------- */
+.creme{background:var(--creme)}
+.douleurs{display:grid;grid-template-columns:repeat(2,1fr);gap:0 3rem}
+@media(max-width:760px){.douleurs{grid-template-columns:1fr}}
+.d{display:flex;gap:1rem;padding:1.3rem 0;border-top:1px solid var(--bord)}
+.d .ic{flex:0 0 26px;height:26px;border-radius:50%;background:#C6553F;color:#fff;display:grid;place-items:center;font-weight:700;font-size:.95rem;margin-top:.25rem;font-family:"Fira Sans Condensed"}
+.d b{font-family:"Fira Sans Condensed";font-weight:700;display:block;font-size:1.15rem;margin-bottom:.1rem}
+.d span{color:var(--gris);font-size:.99rem}
+.bascule{margin-top:2.6rem;border-left:5px solid var(--lime);padding:.3rem 0 .3rem 1.5rem;font-family:"Fira Sans Condensed";font-weight:700;font-size:clamp(1.25rem,3vw,1.7rem);max-width:44ch;line-height:1.2}
+
+/* ---------- engagements ---------- */
+.vertbg{background:linear-gradient(115deg,var(--vert-nuit) 0%,var(--vert-fonce) 55%,var(--vert) 100%);color:#fff}
+.engagements{display:grid;grid-template-columns:repeat(4,1fr);gap:1.8rem}
+@media(max-width:900px){.engagements{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.engagements{grid-template-columns:1fr}}
+.eng{border-top:4px solid var(--lime);padding-top:1rem}
+.eng b{font-family:"Fira Sans Condensed";font-weight:700;font-size:1.25rem;display:block;margin-bottom:.4rem}
+.eng span{color:#DCE7D6;font-size:.99rem}
+
+/* ---------- estimateur ---------- */
+.estim{background:var(--navy-fonce);color:#fff}
+.estim .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:start}
+@media(max-width:900px){.estim .wrap{grid-template-columns:1fr}}
+.panneau{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:4px;padding:clamp(1.4rem,3vw,2.1rem)}
+.champ{margin-bottom:1.3rem}
+label{display:block;font-family:"Fira Sans Condensed";font-weight:600;font-size:.95rem;color:#B9C7E0;margin-bottom:.35rem}
+select,input,textarea{width:100%;font-family:"Fira Sans";font-size:1rem;color:#fff;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.24);border-radius:3px;padding:.72rem .9rem}
+select option{color:#111}
+textarea{min-height:110px;resize:vertical}
+input[type=range]{-webkit-appearance:none;appearance:none;background:none;border:0;padding:0;height:28px}
+input[type=range]::-webkit-slider-runnable-track{height:4px;background:rgba(255,255,255,.28);border-radius:3px}
+input[type=range]::-moz-range-track{height:4px;background:rgba(255,255,255,.28)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;background:var(--lime);border-radius:50%;margin-top:-9px;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;background:var(--lime);border:0;border-radius:50%;cursor:pointer}
+.qte{display:flex;justify-content:space-between;align-items:baseline}
+.qte strong{font-family:"Fira Sans Condensed";font-size:1.5rem;color:var(--lime)}
+.opt{display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:#CFDAEC;cursor:pointer;margin-bottom:.45rem;font-family:"Fira Sans"}
+.opt input{width:auto;accent-color:var(--lime)}
+.resultat{border-top:1px solid rgba(168,204,91,.45);margin-top:1.5rem;padding-top:1.3rem}
+.resultat .lbl{font-family:"Fira Sans Condensed";font-size:.92rem;color:#B9C7E0}
+.montant{font-family:"Fira Sans Condensed";font-weight:800;font-size:clamp(1.9rem,5vw,2.7rem);margin:.15rem 0 .4rem}
+.montant span{color:var(--lime)}
+.detail-postes{list-style:none;padding:0;margin:.9rem 0 0;font-size:.92rem;color:#CFDAEC}
+.detail-postes li{display:flex;justify-content:space-between;gap:1rem;padding:.35rem 0;border-bottom:1px dashed rgba(255,255,255,.16)}
+.detail-postes li span:last-child{color:var(--lime)}
+.detail-postes.majo li span:last-child{color:#E3B65C}
+.avert{font-size:.88rem;color:#93A6C4;line-height:1.5;margin:.9rem 0 0}
+.btn-plein{width:100%;text-align:center;margin-top:1.2rem;border:0}
+
+/* ---------- métiers ---------- */
+.metiers{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+@media(max-width:900px){.metiers{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.metiers{grid-template-columns:1fr}}
+.mt{border:1px solid var(--bord);border-top:5px solid var(--vert);border-radius:4px;padding:1.5rem;background:#fff;transition:.25s}
+.mt:hover{box-shadow:0 10px 30px rgba(31,74,52,.13);transform:translateY(-3px);border-top-color:var(--lime)}
+.mt h3{font-size:1.35rem;margin-bottom:.5rem}
+.mt p{color:var(--gris);font-size:1rem;margin:0 0 .7rem}
+.mt ul{margin:0;padding-left:1.1rem;color:var(--gris);font-size:.95rem}
+.mt li{margin-bottom:.15rem}
+
+/* ---------- méthode ---------- */
+.etapes{display:grid;grid-template-columns:repeat(5,1fr);gap:1.5rem}
+@media(max-width:900px){.etapes{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.etapes{grid-template-columns:1fr}}
+.etape .num{width:42px;height:42px;border-radius:50%;background:var(--lime);color:var(--vert-nuit);font-family:"Fira Sans Condensed";font-weight:800;font-size:1.3rem;display:grid;place-items:center;margin-bottom:.8rem}
+.etape b{font-family:"Fira Sans Condensed";font-weight:700;display:block;font-size:1.15rem;margin-bottom:.3rem}
+.etape span{color:var(--gris);font-size:.96rem}
+
+/* ---------- réalisations ---------- */
+.grille{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:800px){.grille{grid-template-columns:repeat(2,1fr)}}
+.vue{position:relative;aspect-ratio:4/3;background:var(--bord);overflow:hidden;margin:0;border-radius:4px}
+.vue img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.vue:hover img{transform:scale(1.05)}
+.carrou{position:relative;margin-top:1.6rem}
+.car-piste{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.car-piste::-webkit-scrollbar{display:none}
+.car-piste .vue{flex:0 0 calc((100% - 32px)/3);scroll-snap-align:start;cursor:zoom-in}
+.car-fl{position:absolute;top:50%;transform:translateY(-60%);z-index:3;width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.95);color:var(--vert);font-size:2rem;line-height:1;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);display:grid;place-items:center;padding-bottom:4px}
+.car-fl.g{left:-14px}.car-fl.d{right:-14px}
+.car-fl:hover{background:var(--vert);color:#fff}
+.car-aide{text-align:center;font-size:.9rem;color:#6E7A72;margin-top:.8rem}
+@media(max-width:900px){.car-piste .vue{flex-basis:calc((100% - 16px)/2)}}
+@media(max-width:600px){.car-piste .vue{flex-basis:84%}.car-fl{display:none}}
+#lb{position:fixed;inset:0;z-index:9999;background:rgba(5,15,10,.94);display:none;align-items:center;justify-content:center;flex-direction:column;padding:56px 12px 20px}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:calc(100vh - 140px);object-fit:contain;border-radius:4px;box-shadow:0 10px 40px rgba(0,0,0,.5);user-select:none}
+#lb .lb-cap{color:#fff;font-family:"Fira Sans Condensed";font-weight:600;font-size:1.05rem;margin-top:14px;text-align:center}
+#lb .lb-cap span{opacity:.6;font-weight:400;margin-left:.6rem}
+#lb button{position:absolute;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;border-radius:50%;width:52px;height:52px;font-size:2rem;line-height:1;display:grid;place-items:center}
+#lb button:hover{background:rgba(255,255,255,.25)}
+#lb .lb-x{top:12px;right:12px;font-size:1.6rem}
+#lb .lb-g{left:14px;top:50%;transform:translateY(-50%)}#lb .lb-d{right:14px;top:50%;transform:translateY(-50%)}
+@media(max-width:600px){#lb .lb-g,#lb .lb-d{top:auto;bottom:14px;transform:none;width:46px;height:46px}}
+.vue .vide{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-family:"Fira Sans Condensed";font-weight:600;font-size:.95rem;color:#6E7A72;padding:1rem;background:repeating-linear-gradient(45deg,#E6EADF 0 12px,#DDE3D6 12px 24px)}
+.vue figcaption{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(31,74,52,.94));color:#fff;font-family:"Fira Sans Condensed";font-weight:600;font-size:1rem;padding:2.2rem .9rem .8rem}
+
+/* ---------- avis ---------- */
+.temoins{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
+@media(max-width:820px){.temoins{grid-template-columns:1fr}}
+.tm{background:#fff;border:1px solid var(--bord);border-radius:4px;padding:1.5rem;position:relative}
+.tm .et{color:var(--lime);letter-spacing:.14em;font-size:1rem;margin-bottom:.5rem}
+.tm p{margin:0 0 1rem;font-size:1.02rem}
+.tm b{font-family:"Fira Sans Condensed";font-weight:700;display:block}
+.tm small{color:var(--gris)}
+
+/* ---------- faq ---------- */
+details{border-bottom:1px solid var(--bord);padding:1.05rem 0}
+summary{font-family:"Fira Sans Condensed";font-weight:700;font-size:1.18rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:1rem;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--vert);font-size:1.6rem;font-weight:400;line-height:1}
+details[open] summary::after{content:"–"}
+details p{margin:.7rem 0 0;color:var(--gris);max-width:72ch}
+
+/* ---------- devis ---------- */
+.devis{background:var(--vert-nuit);color:#fff}
+.devis .wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(2rem,6vw,4.5rem)}
+@media(max-width:880px){.devis .wrap{grid-template-columns:1fr}}
+.contacts{margin-top:1.8rem;font-family:"Fira Sans Condensed";font-size:1.1rem}
+.contacts a{display:block;text-decoration:none;padding:.65rem 0;border-bottom:1px solid rgba(255,255,255,.18);transition:.2s}
+.contacts a:hover{color:var(--lime);padding-left:.4rem}
+.contacts small{display:block;font-family:"Fira Sans";font-size:.75rem;letter-spacing:.08em;color:#A9C2A6}
+form{display:grid;gap:1rem}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:520px){.duo{grid-template-columns:1fr}}
+.note{font-size:.88rem;color:#A9C2A6}
+
+/* ---------- bande finale (comme le flyer) ---------- */
+.bandeau-fin{display:grid;grid-template-columns:1fr 1.2fr}
+@media(max-width:640px){.bandeau-fin{grid-template-columns:1fr}}
+.bf-vert{background:var(--vert);color:#fff;padding:1.5rem;text-align:center;font-family:"Fira Sans Condensed";font-weight:800;font-size:clamp(1.3rem,3.4vw,1.9rem);text-decoration:none;display:block}
+.bf-vert:hover{background:var(--vert-fonce)}
+.bf-navy{background:var(--navy);color:#fff;padding:1.5rem;text-align:center;font-family:"Fira Sans Condensed";font-weight:700;font-size:clamp(1.15rem,3vw,1.6rem);text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+
+/* ---------- pied ---------- */
+footer{background:var(--navy-fonce);color:#B9C7E0;padding:3.2rem 0 2rem}
+footer .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2rem}
+@media(max-width:780px){footer .wrap{grid-template-columns:1fr}}
+footer h4{font-family:"Fira Sans Condensed";color:#fff;font-size:1.1rem;margin:0 0 .6rem}
+footer p,footer li{font-size:.96rem;margin:.2rem 0}
+footer ul{list-style:none;padding:0;margin:0}
+footer a{text-decoration:none}
+footer a:hover{color:var(--lime)}
+.legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.14);margin-top:2.2rem;padding-top:1.1rem;font-size:.85rem;color:#8FA0BE}
+
+/* ---------- flottants ---------- */
+.wa{position:fixed;right:18px;bottom:18px;z-index:80;width:58px;height:58px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.28);text-decoration:none}
+.wa svg{width:31px;height:31px;fill:#fff}
+.mobibar{position:fixed;left:0;right:0;bottom:0;z-index:75;display:none;background:#fff;border-top:3px solid var(--lime);padding:.55rem;gap:.55rem;box-shadow:0 -4px 16px rgba(0,0,0,.12)}
+.mobibar a{flex:1;text-align:center;font-family:"Fira Sans Condensed";font-weight:700;font-size:1.05rem;text-decoration:none;padding:.7rem .5rem;border-radius:3px}
+@media(max-width:700px){.mobibar{display:flex}.wa{bottom:84px}body{padding-bottom:72px}}
+.rev{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+.rev.vu{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rev{opacity:1;transform:none}}
+
+/* ---------- mobile : typographie plus compacte ---------- */
+@media(max-width:600px){
+ body{font-size:.95rem;line-height:1.55}
+ .hero h1{font-size:2rem}
+ .hero .tag{font-size:1.25rem}
+ .hero .lede{font-size:.95rem}
+ .titre h2{font-size:1.55rem}
+ .titre .sous{font-size:1.15rem}
+ .bascule{font-size:1.1rem}
+ .montant{font-size:1.7rem}
+ .bf-vert{font-size:1.2rem}.bf-navy{font-size:1.05rem}
+ h3{font-size:1.1rem}
+ .btn{font-size:.95rem}
+ .bar nav a{font-size:1.05rem}
+ .tel{font-size:.95rem;padding:.5rem .8rem}
+ .bar .mark{font-size:1.15rem;white-space:nowrap}
+}
+
+.apropos{display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(1.5rem,5vw,3.5rem);align-items:center}
+.apropos img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+.apropos p{margin:0 0 .9rem;color:var(--gris)}
+.apropos-faits{list-style:none;padding:0;margin:1.2rem 0 0;display:grid;gap:.5rem}
+.apropos-faits li{padding-left:1.4rem;position:relative}
+.apropos-faits li:before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;border-radius:50%;background:var(--lime)}
+@media(max-width:800px){.apropos{grid-template-columns:1fr}}
+.zone-t{font-family:"Fira Sans Condensed";font-size:1.15rem;margin:1.2rem 0 .6rem;color:var(--navy)}
+.communes{display:flex;flex-wrap:wrap;gap:.45rem}
+.communes span{background:#fff;border:1px solid var(--bord);border-radius:30px;padding:.35rem .85rem;font-size:.92rem}
+.liens-legaux{grid-column:1/-1;font-size:.85rem;margin-top:.6rem}
+.liens-legaux a{color:#8FA0BE;margin-right:1.2rem}
+.simu{padding-top:calc(clamp(3.2rem,8vw,6rem) + 30px)}.h1simu{font-size:clamp(2rem,5vw,3.2rem);margin:0}
+</style>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<div class="jauge" id="jauge"></div>
+
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="mark" href="/">SL CONCEPT <span>BTP</span></a>
+    <nav>
+      <a href="/simulateur.html" aria-current="page">Estimer mon budget</a>
+      <a href="/qui-sommes-nous.html">Qui sommes-nous</a>
+      <a href="/#methode">Méthode</a>
+      <a href="/#realisations">Réalisations</a>
+      <a href="/zone-intervention.html">Zone d'intervention</a>
+      <a href="/avis.html">Avis clients</a>
+      <a href="#devis">Devis gratuit</a>
+    </nav>
+    <a class="tel" href="tel:+590690270977">0690 27 09 77</a>
+    <a class="tel tel2" href="tel:+590690595042">0690 59 50 42</a>
+    <button class="burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menuMobile"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="haut">
+
+<!-- ================= ESTIMATEUR ================= -->
+<section class="estim simu" id="budget">
+  <div class="wrap">
+    <div>
+      <div class="titre"><h1 class="h1simu">Simulateur de prix</h1><div class="sous">votre budget en 30 secondes</div></div>
+      <div class="filet"></div>
+      <p style="color:#CFDAEC;max-width:42ch">Choisissez votre projet, ajustez la quantité : vous obtenez une fourchette réaliste, TVA DOM 8,5 % comprise, calculée sur nos prix de chantier réels en Guadeloupe.</p>
+      <p style="color:#93A6C4;font-size:.95rem;max-width:42ch;margin-top:1.2rem">Cet outil donne un ordre de grandeur pour vous situer. Le prix ferme est établi après visite technique : accès, nature du sol et niveau de finition font varier le montant.</p>
+      <div class="contacts" style="margin-top:1.6rem"><a href="tel:+590690270977"><small>UNE QUESTION ?</small>0690 27 09 77</a><a href="tel:+590690595042"><small>OU APPELEZ</small>0690 59 50 42</a></div>
+    </div>
+
+    <div class="panneau">
+      <div class="champ">
+        <label for="projet">Type de projet</label>
+        <select id="projet">
+          <option value="rigide">Clôture rigide posée</option>
+          <option value="muret">Muret béton + panneaux pare-vue</option>
+          <option value="muretseul">Muret maçonné enduit (H 1 m)</option>
+          <option value="grillage">Grillage simple torsion</option>
+          <option value="piscine">Piscine béton banché</option>
+          <option value="horssol">Piscine hors-sol avec deck</option>
+          <option value="dalle">Dalle béton / fondations</option>
+          <option value="carrelage">Carrelage posé</option>
+          <option value="maison">Maison individuelle — gros œuvre + toiture</option>
+          <option value="maison_cle">Maison individuelle — clés en main</option>
+          <option value="bungalow">Bungalow / studio annexe</option>
+          <option value="renovation">Rénovation second œuvre</option>
+          <option value="surelevation">Surélévation de maison</option>
+          <option value="terrassement">Terrassement / plateforme</option>
+          <option value="chemin">Chemin d'accès carrossable</option>
+          <option value="reparation_ba">Réparation béton armé</option>
+          <option value="portail">Portail (battant ou motorisé)</option>
+          <option value="soutenement">Mur de soutènement en béton armé</option>
+          <option value="extension">Extension de maison</option>
+          <option value="terrasse">Terrasse béton / escalier</option>
+          <option value="plots">Plots et fondations (fouilles + béton)</option>
+          <option value="demolition_p">Démolition et évacuation</option>
+          <option value="assainissement">Assainissement (fosse + épandage)</option>
+          <option value="carport">Carport / garage</option>
+          <option value="piscine_coque">Piscine coque polyester</option>
+        </select>
+      </div>
+      <div class="champ">
+        <div class="qte"><label for="qte" id="lblQte">Longueur</label><strong id="valQte">30 ml</strong></div>
+        <input type="range" id="qte" min="5" max="150" value="30" step="1">
+      </div>
+      <div class="champ">
+        <label for="finition">Niveau de finition</label>
+        <select id="finition">
+          <option value="0.88">Économique</option>
+          <option value="1" selected>Standard</option>
+          <option value="1.25">Premium</option>
+        </select>
+      </div>
+      <div class="champ">
+        <label for="mode">Prestation</label>
+        <select id="mode">
+          <option value="1" selected>Fourniture et main d'œuvre comprises</option>
+          <option value="0.4">Main d'œuvre seule (vous fournissez les matériaux)</option>
+        </select>
+      </div>
+      <div class="champ">
+        <label class="opt"><input type="checkbox" id="acces"> Accès difficile (pente, ruelle étroite, pas de camion)</label>
+        <label class="opt"><input type="checkbox" id="demolition"> Dépose ou démolition de l'existant</label>
+        <label class="opt"><input type="checkbox" id="pente"> Terrain en pente ou dénivelé important</label>
+        <label class="opt"><input type="checkbox" id="urgent"> Démarrage rapide souhaité (sous 15 jours)</label>
+        <label class="opt"><input type="checkbox" id="littoral"> Zone littorale (traitement anticorrosion renforcé)</label>
+        <label class="opt"><input type="checkbox" id="hauteur"> Travaux en hauteur (étage, toiture)</label>
+        <label class="opt"><input type="checkbox" id="gravats"> Évacuation des gravats et déblais</label>
+        <label class="opt"><input type="checkbox" id="etude"> Étude béton armé / plans d'exécution</label>
+        <label class="opt"><input type="checkbox" id="engin"> Location d'engin (pelle, grue) incluse</label>
+      </div>
+      <div class="resultat">
+        <div class="lbl">Estimation indicative, TTC (TVA 8,5 %)</div>
+        <div class="montant" id="montant">— <span>€</span></div>
+        <ul class="detail-postes" id="postes"></ul>
+        <ul class="detail-postes majo" id="majorations" style="margin-top:.4rem"></ul>
+        <p class="delai" id="delai"></p>
+        <p class="avert">Estimation hors terrassement lourd et hors raccordements eau/électricité. Le niveau de finition fait varier le montant de ±12 à 25 % selon les matériaux choisis.</p>
+        <button class="btn btn-lime btn-plein" id="envoyerEstim" type="button">Demander un devis sur cette base</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEVIS ================= -->
+<section class="devis" id="devis">
+  <div class="wrap">
+    <div>
+      <div class="titre"><h2>Parlons de votre projet</h2><div class="sous">réponse sous 72 h</div></div>
+      <div class="filet"></div>
+      <p style="color:#DCE7D6;max-width:40ch">Décrivez les travaux en quelques lignes. Nous vous rappelons pour organiser la visite technique.</p>
+      <div class="contacts">
+        <a href="#rappel" data-rappel><small>RAPPEL GRATUIT</small>Être rappelé au créneau de votre choix</a>
+        <a href="tel:+590690270977"><small>TÉLÉPHONE</small>0690 27 09 77</a>
+        <a href="tel:+590690595042"><small>TÉLÉPHONE</small>0690 59 50 42</a>
+        <a href="https://wa.me/590690270977" target="_blank" rel="noopener"><small>WHATSAPP</small>Envoyer des photos du chantier</a>
+        <a href="mailto:SLconcept-btp@outlook.com"><small>E-MAIL</small>SLconcept-btp@outlook.com</a>
+        <a href="https://maps.google.com/?q=Chemin+de+la+Manioquerie+97116+Pointe-Noire" target="_blank" rel="noopener"><small>ADRESSE</small>Chemin de la Manioquerie, 97116 Pointe-Noire</a>
+      </div>
+    </div>
+    <form id="formDevis">
+      <div class="duo">
+        <div><label for="nom">Nom et prénom</label><input id="nom" required placeholder="Votre nom"></div>
+        <div><label for="tel">Téléphone</label><input id="tel" type="tel" required placeholder="0690 00 00 00"></div>
+      </div>
+      <div class="duo">
+        <div><label for="email">E-mail</label><input id="email" type="email" placeholder="vous@exemple.com"></div>
+        <div><label for="commune">Commune des travaux</label><input id="commune" placeholder="Pointe-Noire, Le Gosier…"></div>
+      </div>
+      <div><label for="type">Type de projet</label>
+        <select id="type">
+          <option>Maison individuelle / bungalow</option><option>Clôture</option><option>Piscine</option>
+          <option>Chemin d'accès / terrassement</option><option>Rénovation tous corps d'état</option>
+          <option>Réparation béton armé</option><option>Mur de soutènement / démolition / assainissement</option><option>Autre</option>
+        </select>
+      </div>
+      <div><label for="msg">Votre projet</label><textarea id="msg" placeholder="Surface, longueur, délai souhaité, contraintes d'accès…"></textarea></div>
+      <div><label for="photos">Plans ou photos du terrain <span style="font-weight:400;opacity:.75">(facultatif : PDF, JPG, PNG — 3 fichiers max)</span></label>
+        <input id="photos" type="file" accept="image/*,application/pdf,.pdf" multiple style="padding:.55rem;background:rgba(255,255,255,.06)">
+        <div id="apercu" style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap"></div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:.8rem;align-items:center">
+        <button class="btn btn-lime" type="submit" id="btnEnvoi">Envoyer ma demande</button>
+        <a class="btn btn-blanc" id="lienWa" href="#" style="padding:.85rem 1.4rem;font-size:.95rem">ou par WhatsApp</a>
+      </div>
+      <p class="note" id="note">Votre demande arrive directement chez SL CONCEPT BTP. Réponse sous 72 h.</p>
+      <p class="note" style="font-size:.78rem;opacity:.8">Vos données servent uniquement à traiter votre demande. <a href="/confidentialite.html" style="color:inherit">Politique de confidentialité</a>.</p>
+    </form>
+  </div>
+</section>
+
+<div class="bandeau-fin">
+  <a class="bf-vert" href="#devis">Devis gratuit</a>
+  <div class="bf-navy">
+    <svg width="20" height="26" viewBox="0 0 24 30" fill="#fff"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 18 12 18s12-9 12-18c0-6.6-5.4-12-12-12zm0 16.5A4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 0 1 0 9z"/></svg>
+    Toute la Guadeloupe
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h4>SL CONCEPT BTP</h4>
+      <p>Spécialiste du gros œuvre en Guadeloupe : maison individuelle, bungalow, piscine, clôture, chemin d'accès et tous corps d'état.</p>
+      <p style="margin-top:.8rem">Chemin de la Manioquerie<br>97116 Pointe-Noire, Guadeloupe</p>
+    </div>
+    <div><h4>Contact</h4><ul>
+      <li><a href="tel:+590690270977">0690 27 09 77</a></li>
+      <li><a href="tel:+590690595042">0690 59 50 42</a></li>
+      <li><a href="https://wa.me/590690270977" target="_blank" rel="noopener">WhatsApp</a></li>
+      <li><a href="mailto:SLconcept-btp@outlook.com">SLconcept-btp@outlook.com</a></li>
+      <li><a href="https://www.instagram.com/sl_concept_btp/" target="_blank" rel="noopener">Instagram</a></li>
+    </ul></div>
+    <div><h4>Nos autres activités</h4><ul>
+      <li><a href="https://kaztravay.pro" target="_blank" rel="noopener">KazTravay — le marketplace des devis</a></li>
+      <li>Pure Pro Net Caraïbes — nettoyage de chantier</li>
+    </ul></div>
+    <div class="liens-legaux"><a href="/mentions-legales.html">Mentions légales</a><a href="/confidentialite.html">Politique de confidentialité</a></div>
+    <div class="legal">SAS SL CONCEPT BTP · SIREN 984 677 278 · APE 4120B · Assurance décennale tous corps d'état · © <span id="annee"></span></div>
+  </div>
+</footer>
+
+<a class="wa" href="https://wa.me/590690270977" target="_blank" rel="noopener" aria-label="Écrire sur WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.6c.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5 4.4.7.3 1.3.5 1.7.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2A10 10 0 0 0 3.4 17.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3a8.2 8.2 0 1 1 7.1 3.8z"/></svg>
+</a>
+
+<div class="mobibar">
+  <a href="tel:+590690270977" style="background:var(--vert);color:#fff">Appeler</a>
+  <a href="#devis" style="background:var(--lime);color:var(--vert-nuit)">Devis gratuit</a>
+</div>
+
+<script>
+document.getElementById('annee').textContent = new Date().getFullYear();
+
+addEventListener('scroll', function(){
+  var h=document.documentElement;
+  document.getElementById('jauge').style.width = (h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+}, {passive:true});
+
+if ('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vu');io.unobserve(e.target);}});},{threshold:.15});
+  document.querySelectorAll('.rev').forEach(function(el){io.observe(el);});
+} else { document.querySelectorAll('.rev').forEach(function(el){el.classList.add('vu');}); }
+
+/* ===== ESTIMATEUR — barème modifiable ici (prix TTC, TVA 8,5 % incluse) ===== */
+var BAREME={
+ rigide:{nom:"Clôture rigide posée",unite:"ml",min:5,max:200,def:40,bas:75,haut:95,postes:["Semelles et poteaux béton","Panneaux rigides fournis et posés"]},
+ muret:{nom:"Muret béton + pare-vue",unite:"ml",min:5,max:120,def:30,bas:380,haut:520,postes:["Semelle filante BA + agglos 20","Chaînages et enduit taloché","Poteaux et panneaux pare-vue"]},
+ muretseul:{nom:"Muret maçonné enduit (H 1 m)",unite:"ml",min:5,max:150,def:30,bas:240,haut:340,postes:["Semelle filante ferraillée","Agglos 20, chaînages HA","Enduit taloché deux faces"]},
+ grillage:{nom:"Grillage simple torsion",unite:"ml",min:10,max:300,def:50,bas:50,haut:70,postes:["Poteaux scellés","Grillage tendu et jambes de force"]},
+ piscine:{nom:"Piscine béton banché",unite:"m²",min:8,max:60,def:18,bas:1100,haut:1550,postes:["Terrassement et structure béton","Étanchéité et revêtement","Local technique et filtration"]},
+ horssol:{nom:"Piscine hors-sol avec deck",unite:"m²",min:8,max:40,def:10,bas:900,haut:1500,postes:["Structure et bassin","Deck bois et margelles","Filtration et éclairage"]},
+ dalle:{nom:"Dalle béton / fondations",unite:"m²",min:10,max:300,def:60,bas:150,haut:230,postes:["Décaissement et hérisson","Ferraillage et coulage","Finition talochée"]},
+ carrelage:{nom:"Carrelage posé",unite:"m²",min:10,max:300,def:40,bas:70,haut:110,postes:["Préparation du support","Pose et joints","Plinthes et finitions"]},
+ maison:{nom:"Maison individuelle — gros œuvre + toiture",unite:"m²",min:40,max:250,def:90,bas:850,haut:1100,postes:["Fondations et dallage","Élévation, chaînages, enduits","Charpente et couverture"]},
+ maison_cle:{nom:"Maison individuelle — clés en main",unite:"m²",min:40,max:250,def:90,bas:1500,haut:1900,postes:["Gros œuvre et toiture","Menuiseries, électricité, plomberie, chauffe-eau solaire","Carrelage, plafonds, peinture"]},
+ bungalow:{nom:"Bungalow / studio annexe",unite:"m²",min:15,max:80,def:30,bas:1200,haut:1700,postes:["Fondations adaptées petite emprise","Structure et couverture","Second œuvre de base"]},
+ renovation:{nom:"Rénovation second œuvre",unite:"m²",min:15,max:150,def:50,bas:350,haut:600,postes:["Dépose et préparation des supports","Cloisons, peinture, sols","Finitions salle d'eau / cuisine"]},
+ surelevation:{nom:"Surélévation de maison",unite:"m²",min:20,max:150,def:50,bas:1100,haut:1600,postes:["Renforcement de structure existante","Élévation et chaînages","Charpente et couverture"]},
+ terrassement:{nom:"Terrassement / plateforme",unite:"m²",min:20,max:500,def:100,bas:45,haut:95,postes:["Décapage et décaissement","Nivellement et compactage","Évacuation des déblais"]},
+ chemin:{nom:"Chemin d'accès carrossable",unite:"ml",min:10,max:200,def:40,bas:220,haut:350,postes:["Terrassement et forme","Empierrement ou dalle béton","Finition roulante"]},
+ reparation_ba:{nom:"Réparation béton armé",unite:"m²",min:5,max:100,def:15,bas:250,haut:450,postes:["Purge et passivation des aciers","Reprofilage mortier R4","Protection anticarbonatation"]},
+ portail:{nom:"Portail battant ou motorisé",unite:"ml",min:3,max:8,def:4,bas:500,haut:1300,postes:["Structure aluminium ou fer","Poteaux et scellement","Motorisation en option"]},
+ piscine_coque:{nom:"Piscine coque polyester",unite:"m²",min:8,max:40,def:16,bas:900,haut:1300,postes:["Terrassement et pose de la coque","Raccordements et remblai","Margelles et finitions"]},
+ soutenement:{nom:"Mur de soutènement en béton armé",unite:"m²",min:5,max:150,def:25,bas:450,haut:700,postes:["Fouille et semelle ferraillée","Voile béton armé banché","Drainage et remblai"]},
+ extension:{nom:"Extension de maison",unite:"m²",min:10,max:100,def:25,bas:1100,haut:1600,postes:["Fondations et raccord à l'existant","Élévation, chaînages, dalle","Charpente et couverture"]},
+ terrasse:{nom:"Terrasse béton / escalier",unite:"m²",min:5,max:150,def:30,bas:180,haut:300,postes:["Préparation et ferraillage","Coulage et finition","Marches et nez de marche si escalier"]},
+ plots:{nom:"Plots et fondations (fouilles + béton)",unite:"plots",min:1,max:60,def:8,bas:250,haut:400,postes:["Fouille à la dimension","Ferraillage","Coulage béton"]},
+ demolition_p:{nom:"Démolition et évacuation",unite:"m²",min:5,max:300,def:30,bas:50,haut:110,postes:["Démolition manuelle ou mécanique","Tri et chargement","Évacuation en décharge"]},
+ assainissement:{nom:"Assainissement (fosse + épandage)",unite:"u",min:1,max:3,def:1,bas:6000,haut:11000,postes:["Fouille et fosse toutes eaux","Regards et canalisations","Épandage et remblai"]},
+ carport:{nom:"Carport / garage",unite:"m²",min:12,max:80,def:20,bas:450,haut:800,postes:["Plots et dalle béton","Structure porteuse","Couverture"]}
+};
+var DELAI={rigide:[3,.15],muret:[4,.35],muretseul:[3,.25],grillage:[2,.08],piscine:[35,1.2],horssol:[10,.8],dalle:[4,.2],carrelage:[3,.25],
+ maison:[30,.6],maison_cle:[80,.9],bungalow:[30,1.5],renovation:[7,.5],surelevation:[40,1],terrassement:[2,.08],chemin:[3,.3],reparation_ba:[3,.6],portail:[3,1.5],
+ piscine_coque:[10,.8],soutenement:[7,.5],extension:[25,1.5],terrasse:[3,.25],plots:[2,.4],demolition_p:[2,.1],assainissement:[5,2],carport:[6,.7]};
+var elProjet=document.getElementById('projet'),elQte=document.getElementById('qte'),
+    elVal=document.getElementById('valQte'),elLbl=document.getElementById('lblQte'),
+    elMontant=document.getElementById('montant'),elPostes=document.getElementById('postes'),
+    elAcces=document.getElementById('acces'),elDemo=document.getElementById('demolition'),
+    elFinition=document.getElementById('finition'),elPente=document.getElementById('pente'),
+    elUrgent=document.getElementById('urgent'),elLittoral=document.getElementById('littoral'),
+    elHauteur=document.getElementById('hauteur'),elMode=document.getElementById('mode'),
+    elGravats=document.getElementById('gravats'),elEtude=document.getElementById('etude'),elEngin=document.getElementById('engin');
+function euro(n){return Math.round(n/50)*50;}
+function fmt(n){return n.toLocaleString('fr-FR');}
+function calculer(){
+  var b=BAREME[elProjet.value],q=parseFloat(elQte.value),k=1;
+  var options=[
+    {el:elAcces, pct:15, label:"Accès difficile"},
+    {el:elDemo, pct:8, label:"Dépose / démolition"},
+    {el:elPente, pct:12, label:"Terrain en pente"},
+    {el:elUrgent, pct:10, label:"Démarrage rapide"},
+    {el:elLittoral, pct:10, label:"Zone littorale"},
+    {el:elHauteur, pct:10, label:"Travaux en hauteur"},
+    {el:elGravats, pct:5, label:"Évacuation des gravats"},
+    {el:elEtude, pct:4, label:"Étude béton armé / plans"},
+    {el:elEngin, pct:6, label:"Location d'engin incluse"}
+  ];
+  var lignesMajo=[];
+  options.forEach(function(o){
+    if(o.el.checked){ k*=(1+o.pct/100); lignesMajo.push('<li><span>'+o.label+'</span><span>+'+o.pct+' %</span></li>'); }
+  });
+  var modeVal=parseFloat(elMode.value);
+  if(modeVal!==1){k*=modeVal;lignesMajo.push('<li><span>Main d\u2019œuvre seule</span><span>−'+Math.round((1-modeVal)*100)+' %</span></li>');}
+  var finitionVal=parseFloat(elFinition.value);
+  if(finitionVal!==1){
+    var pctFinition=Math.round((finitionVal-1)*100);
+    k*=finitionVal;
+    lignesMajo.push('<li><span>Finition '+elFinition.options[elFinition.selectedIndex].text.toLowerCase()+'</span><span>'+(pctFinition>0?'+':'')+pctFinition+' %</span></li>');
+  }
+  elMontant.innerHTML=fmt(euro(b.bas*q*k))+' – '+fmt(euro(b.haut*q*k))+' <span>€</span>';
+  elVal.textContent=q+' '+b.unite;
+  elLbl.textContent=(b.unite==='ml')?'Longueur':(b.unite==='m²'?'Surface':'Quantité');
+  var dl=DELAI[elProjet.value]||[5,.5],j=Math.ceil(dl[0]+dl[1]*q),j2=Math.ceil(j*1.3);
+  function dur(n){return n>=14?Math.round(n/7)+' sem.':n+' j';}
+  document.getElementById('delai').textContent='Durée de chantier indicative : '+(dur(j)===dur(j2)?'environ '+dur(j):dur(j)+' à '+dur(j2))+' (hors intempéries)';
+  elPostes.innerHTML=b.postes.map(function(p){return '<li><span>'+p+'</span><span>compris</span></li>';}).join('');
+  document.getElementById('majorations').innerHTML=lignesMajo.join('');
+}
+function changerProjet(){var b=BAREME[elProjet.value];elQte.min=b.min;elQte.max=b.max;elQte.value=b.def;calculer();}
+elProjet.addEventListener('change',changerProjet);
+[elQte,elAcces,elDemo,elFinition,elPente,elUrgent,elLittoral,elHauteur,elMode,elGravats,elEtude,elEngin].forEach(function(e){e.addEventListener('input',calculer);e.addEventListener('change',calculer);});
+changerProjet();
+
+var CORRESPONDANCE={
+  rigide:"Clôture", muret:"Clôture", muretseul:"Clôture", grillage:"Clôture", portail:"Clôture",
+  piscine:"Piscine", horssol:"Piscine", piscine_coque:"Piscine",
+  dalle:"Chemin d'accès / terrassement", carrelage:"Rénovation tous corps d'état",
+  maison:"Maison individuelle / bungalow", maison_cle:"Maison individuelle / bungalow", bungalow:"Maison individuelle / bungalow",
+  renovation:"Rénovation tous corps d'état", surelevation:"Maison individuelle / bungalow",
+  terrassement:"Chemin d'accès / terrassement", chemin:"Chemin d'accès / terrassement",
+  reparation_ba:"Réparation béton armé",
+  soutenement:"Mur de soutènement / démolition / assainissement", demolition_p:"Mur de soutènement / démolition / assainissement", assainissement:"Mur de soutènement / démolition / assainissement",
+  extension:"Maison individuelle / bungalow", terrasse:"Maison individuelle / bungalow", plots:"Maison individuelle / bungalow", carport:"Maison individuelle / bungalow"
+};
+document.getElementById('envoyerEstim').addEventListener('click',function(){
+  var b=BAREME[elProjet.value],t=document.getElementById('type'),cible=CORRESPONDANCE[elProjet.value];
+  for(var i=0;i<t.options.length;i++){ if(t.options[i].text===cible) t.selectedIndex=i; }
+  var finitionTxt=elFinition.options[elFinition.selectedIndex].text;
+  document.getElementById('msg').value=b.nom+' — '+elQte.value+' '+b.unite+' — finition '+finitionTxt+
+    (elAcces.checked?'\nAccès difficile':'')+(elDemo.checked?'\nDépose de l\'existant à prévoir':'')+
+    (elPente.checked?'\nTerrain en pente':'')+(elUrgent.checked?'\nDémarrage rapide souhaité':'')+
+    (elLittoral.checked?'\nZone littorale':'')+(elHauteur.checked?'\nTravaux en hauteur':'')+(elGravats.checked?'\nÉvacuation des gravats':'')+(elEtude.checked?'\nÉtude béton armé / plans':'')+(elEngin.checked?'\nLocation d\'engin incluse':'')+(parseFloat(elMode.value)!==1?'\nMain d\'œuvre seule':'')+
+    '\nEstimation obtenue sur le site : '+elMontant.textContent.replace(/\s+/g,' ').trim();
+  document.getElementById('devis').scrollIntoView({behavior:'smooth'});
+  setTimeout(function(){document.getElementById('nom').focus();},700);
+});
+
+function texteDemande(){
+  var v=function(id){return document.getElementById(id).value.trim();};
+  return 'Bonjour SL CONCEPT BTP, je souhaite un devis.\n'+
+    'Nom : '+v('nom')+'\nTéléphone : '+v('tel')+
+    (v('email')?'\nE-mail : '+v('email'):'')+
+    '\nCommune : '+v('commune')+'\nType de projet : '+v('type')+
+    '\n\nProjet :\n'+v('msg');
+}
+var PHOTOS=[];
+(function(){
+  var inp=document.getElementById('photos'),ap=document.getElementById('apercu'),MAXPDF=3*1024*1024;
+  function reduire(f){return new Promise(function(ok,ko){var u=URL.createObjectURL(f),im=new Image();
+    im.onload=function(){var M=1600,w=im.width,h=im.height,k=Math.min(1,M/Math.max(w,h));var c=document.createElement('canvas');
+      c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
+      var d=c.toDataURL('image/jpeg',0.75);ok({data:d.split(',')[1],nom:f.name.replace(/\.[^.]+$/,'')+'.jpg',type:'image/jpeg',apercu:d});};im.onerror=ko;im.src=u;});}
+  function lirePdf(f){return new Promise(function(ok,ko){var r=new FileReader();r.onload=function(){ok({data:String(r.result).split(',')[1],nom:f.name,type:'application/pdf'});};r.onerror=ko;r.readAsDataURL(f);});}
+  inp.addEventListener('change',function(){
+    var fs=[].slice.call(inp.files||[]).slice(0,3),err='';
+    PHOTOS=[];ap.innerHTML='';
+    var taches=fs.map(function(f){
+      if(/^image\//.test(f.type))return reduire(f);
+      if(f.type==='application/pdf'||/\.pdf$/i.test(f.name)){
+        if(f.size>MAXPDF){err='Le fichier « '+f.name+' » dépasse 3 Mo : envoyez-le par WhatsApp ou à SLconcept-btp@outlook.com.';return Promise.resolve(null);}
+        return lirePdf(f);}
+      err='Format non accepté : '+f.name;return Promise.resolve(null);});
+    Promise.all(taches).then(function(res){res.forEach(function(x){if(!x)return;PHOTOS.push({data:x.data,nom:x.nom,type:x.type});
+      if(x.apercu){var i=document.createElement('img');i.src=x.apercu;i.style.cssText='width:64px;height:64px;object-fit:cover;border-radius:4px;border:2px solid var(--lime)';ap.appendChild(i);}
+      else{var t=document.createElement('span');t.textContent='📄 '+x.nom;t.style.cssText='display:inline-flex;align-items:center;padding:.4rem .7rem;border:2px solid var(--lime);border-radius:4px;font-size:.85rem;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';ap.appendChild(t);}});
+      if(err){var e=document.createElement('div');e.textContent=err;e.style.cssText='width:100%;font-size:.85rem;color:#F5B301';ap.appendChild(e);}})
+    .catch(function(){ap.textContent='Un fichier n\u2019a pas pu être lu.';});
+  });
+})();
+function ouvrirWa(){window.open('https://wa.me/590690270977?text='+encodeURIComponent(texteDemande()),'_blank');}
+document.getElementById('lienWa').addEventListener('click',function(e){e.preventDefault();ouvrirWa();});
+document.getElementById('formDevis').addEventListener('submit',function(e){
+  e.preventDefault();
+  var v=function(id){return document.getElementById(id).value.trim();};
+  var note=document.getElementById('note'),btn=document.getElementById('btnEnvoi');
+  if(!v('nom')||!v('tel')){note.textContent='Merci de renseigner au moins votre nom et votre téléphone.';return;}
+  var poids=PHOTOS.reduce(function(t,p){return t+p.data.length;},0);
+  if(poids>4200000){note.textContent='Les fichiers joints sont trop lourds (4 Mo max au total). Retirez-en un ou envoyez-le par WhatsApp.';return;}
+  btn.disabled=true;btn.textContent='Envoi…';
+  fetch('/api/devis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    nom:v('nom'),tel:v('tel'),email:v('email'),commune:v('commune'),type:v('type'),msg:v('msg'),
+    estimation:(document.getElementById('montant')||{textContent:''}).textContent.replace(/\s+/g,' ').trim(),
+    photos:PHOTOS})})
+  .then(function(r){if(!r.ok)return r.text().then(function(t){throw t;});
+    note.innerHTML='<strong>Merci, votre demande est bien envoyée.</strong> Nous vous rappelons sous 72 h.';
+    document.getElementById('formDevis').reset();PHOTOS=[];document.getElementById('apercu').innerHTML='';btn.textContent='Demande envoyée ✓';})
+  .catch(function(err){btn.disabled=false;btn.textContent='Envoyer ma demande';
+    note.innerHTML='L\u2019envoi a échoué. Utilisez le bouton WhatsApp, ou appelez le <strong>0690 27 09 77</strong> ou le <strong>0690 59 50 42</strong>.';});
+});
+
+
+
+(function(){var bar=document.getElementById('bar'),b=document.getElementById('burger');
+  function fermer(){bar.classList.remove('ouvert');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Ouvrir le menu');}
+  b.addEventListener('click',function(){var o=bar.classList.toggle('ouvert');b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Fermer le menu':'Ouvrir le menu');});
+  bar.querySelectorAll('nav a').forEach(function(a){a.addEventListener('click',fermer);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')fermer();});
+})();
+</script>
+<script src="/rappel.js" defer></script>
+</body>
+</html>

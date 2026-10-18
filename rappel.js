@@ -37,14 +37,14 @@ document.getElementById('rpForm').addEventListener('submit',function(e){e.preven
 });
 if(location.hash==='#rappel')ouvrir();
 /* Fenêtre de bienvenue : page d'accueil seulement, une seule fois */
-var budget=document.getElementById('budget');if(!budget)return;
+var budget=document.getElementById('budget');if(!budget||/simulateur/.test(location.pathname))return;
 var deja=false;try{deja=localStorage.getItem('slc_bienvenue')==='1';}catch(e){}
 if(deja)return;
 setTimeout(function(){
   var r=budget.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)return; /* déjà sur l'estimateur */
   if(fond.classList.contains('ouvert'))return;
   try{localStorage.setItem('slc_bienvenue','1');}catch(e){}
-  document.body.insertAdjacentHTML('beforeend','<div class="bv" id="bv" role="status"><button type="button" class="rp-x" aria-label="Fermer">×</button><b>Votre budget en 30 secondes</b><span>Estimez votre projet gratuitement, sans engagement.</span><a href="#budget">Estimer mon projet</a></div>');
+  document.body.insertAdjacentHTML('beforeend','<div class="bv" id="bv" role="status"><button type="button" class="rp-x" aria-label="Fermer">×</button><b>Votre budget en 30 secondes</b><span>Estimez votre projet gratuitement, sans engagement.</span><a href="/simulateur.html">Estimer mon projet</a></div>');
   var bv=document.getElementById('bv');requestAnimationFrame(function(){requestAnimationFrame(function(){bv.classList.add('vu');});});
   function cacher(){bv.classList.remove('vu');setTimeout(function(){bv.remove();},500);}
   bv.querySelector('.rp-x').onclick=cacher;bv.querySelector('a').addEventListener('click',cacher);
