@@ -658,7 +658,7 @@ document.getElementById('formDevis').addEventListener('submit',function(e){
   btn.disabled=true;btn.textContent='Envoi…';
   fetch('/api/devis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
     nom:v('nom'),tel:v('tel'),email:v('email'),commune:v('commune'),type:v('type'),msg:v('msg'),
-    estimation:(document.getElementById('montant')||{textContent:''}).textContent.replace(/\s+/g,' ').trim(),
+    estimation:((v('msg').match(/Estimation obtenue sur le site\s*:\s*(.+)/)||[])[1]||'').trim(),
     photos:PHOTOS})})
   .then(function(r){if(!r.ok)return r.text().then(function(t){throw t;});
     note.innerHTML='<strong>Merci, votre demande est bien envoyée.</strong> Nous vous rappelons sous 72 h.';
