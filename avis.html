@@ -377,7 +377,7 @@ document.querySelectorAll('.rev').forEach(function(el){el.classList.add('vu');})
   document.addEventListener('keydown',function(e){if(e.key==='Escape')fermer();});
 })();
 /* ===== AVIS : ajouter ici uniquement des avis réels et validés par SL CONCEPT BTP ===== */
-var AVIS_PUBLIES=[{nom:"Diana",commune:"Petit-Canal",note:4,texte:"Service réactif et professionnel, demande de devis prise en charge rapidement et échanges fluides. Si c'est ainsi pour le suivi de travaux c'est de bonne augure."}]; /* ex : {nom:"Prénom N.",commune:"Pointe-Noire",note:5,texte:"…"} */
+var AVIS_PUBLIES=[{nom:"Véronique B.",commune:"Baie-Mahault",note:5,texte:"Interlocuteur très explicite et très réactif pour le devis."},{nom:"Diana",commune:"Petit-Canal",note:4,texte:"Service réactif et professionnel, demande de devis prise en charge rapidement et échanges fluides. Si c'est ainsi pour le suivi de travaux c'est de bonne augure."}]; /* ex : {nom:"Prénom N.",commune:"Pointe-Noire",note:5,texte:"…"} */
 (function(){
   var liste=document.getElementById('listeAvis');
   liste.innerHTML=AVIS_PUBLIES.map(function(a){
