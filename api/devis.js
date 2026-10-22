@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
       const base = String(p.nom || '').replace(/[^\w.\- ]+/g, '').replace(/\.[^.]*$/, '').slice(0, 60) || (pdf ? 'plan' : 'photo') + '-' + (i + 1);
       return { filename: base + (pdf ? '.pdf' : '.jpg'), content: p.data };
     });
-  const rows = [['Nom', nom], ['Téléphone', tel], ['E-mail', email], ['Commune', b.commune], ['Type de projet', b.type],
+  const rows = [['Nom', nom], ['Téléphone', tel], ['E-mail', email], ['Commune', b.commune], ['Type de projet', b.type], ['Où en est le client', b.avancement],
     ['Estimation du site', b.estimation], ['Projet', b.msg], ['Pièces jointes', photos.length ? photos.map(p => p.filename).join(', ') : '']].filter(r => r[1]);
   const html = '<h2>Nouvelle demande de devis</h2><table cellpadding="6" style="border-collapse:collapse;font-family:Arial">' +
     rows.map(r => `<tr><td style="color:#555"><b>${esc(r[0])}</b></td><td>${esc(String(r[1]).slice(0, 3000)).replace(/\n/g, '<br>')}</td></tr>`).join('') +

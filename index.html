@@ -54,7 +54,7 @@ section{padding:clamp(3.2rem,8vw,6rem) 0}
 .bar.ouvert .burger span:nth-child(1){transform:translateY(8px) rotate(45deg)}
 .bar.ouvert .burger span:nth-child(2){opacity:0}
 .bar.ouvert .burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
-@media(max-width:1100px){
+@media(max-width:1180px){
  .burger{display:flex}
  .bar .mark{margin-right:auto}
  .bar nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;background:#fff;border-bottom:3px solid var(--lime);box-shadow:0 12px 24px rgba(0,0,0,.12);padding:.4rem 0}
@@ -301,6 +301,12 @@ footer a:hover{color:var(--lime)}
 .teaser-cta ul{list-style:none;padding:0;margin:0 0 1.4rem;display:grid;gap:.6rem;color:#fff}
 .teaser-cta li{padding-left:1.6rem;position:relative}.teaser-cta li:before{content:"✓";position:absolute;left:0;color:var(--lime);font-weight:700}
 .teaser-cta .btn{display:block;text-align:center}
+.accomp-band{background:var(--lime);padding:1.6rem 0}
+.accomp-band .wrap{display:flex;align-items:center;justify-content:space-between;gap:1.2rem;flex-wrap:wrap}
+.accomp-band b{display:block;font-family:"Fira Sans Condensed";font-size:1.45rem;color:var(--vert-nuit)}
+.accomp-band span{color:var(--vert-nuit)}
+.accomp-band .btn-lime{background:var(--vert-nuit);color:#fff}
+@media(min-width:1181px) and (max-width:1300px){.bar nav{gap:.7rem;font-size:.94rem}.mark{font-size:1.3rem}}
 </style>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -315,7 +321,7 @@ footer a:hover{color:var(--lime)}
     <nav>
       <a href="/simulateur.html">Estimer mon budget</a>
       <a href="/qui-sommes-nous.html">Qui sommes-nous</a>
-      <a href="#methode">Méthode</a>
+      <a href="/accompagnement.html">Accompagnement</a>
       <a href="#realisations">Réalisations</a>
       <a href="/zone-intervention.html">Zone d'intervention</a>
       <a href="/avis.html">Avis clients</a>
@@ -393,6 +399,13 @@ footer a:hover{color:var(--lime)}
     </div>
   </div>
 </section>
+
+
+<!-- ================= ACCOMPAGNEMENT ================= -->
+<section class="accomp-band"><div class="wrap">
+  <div><b>Pas encore de plans ni de permis ?</b><span>Plans, permis de construire, études de sol et béton armé : on s'occupe de tout avec nos partenaires.</span></div>
+  <a class="btn btn-lime" href="/accompagnement.html">Découvrir l'accompagnement →</a>
+</div></section>
 
 <!-- ================= ENGAGEMENTS ================= -->
 <section class="vertbg">
@@ -500,6 +513,12 @@ footer a:hover{color:var(--lime)}
           <option>Réparation béton armé</option><option>Mur de soutènement / démolition / assainissement</option><option>Autre</option>
         </select>
       </div>
+      <div><label for="avancement">Où en êtes-vous ?</label>
+        <select id="avancement">
+          <option value="">— Choisir —</option><option>Je cherche un terrain</option><option>J'ai un terrain, sans plans</option>
+          <option>J'ai des plans, pas encore de permis</option><option>J'ai mon permis de construire</option><option>Travaux sur une maison existante</option>
+        </select>
+      </div>
       <div><label for="msg">Votre projet</label><textarea id="msg" placeholder="Surface, longueur, délai souhaité, contraintes d'accès…"></textarea></div>
       <div><label for="photos">Plans ou photos du terrain <span style="font-weight:400;opacity:.75">(facultatif : PDF, JPG, PNG — 3 fichiers max)</span></label>
         <input id="photos" type="file" accept="image/*,application/pdf,.pdf" multiple style="padding:.55rem;background:rgba(255,255,255,.06)">
@@ -575,7 +594,7 @@ function texteDemande(){
   return 'Bonjour SL CONCEPT BTP, je souhaite un devis.\n'+
     'Nom : '+v('nom')+'\nTéléphone : '+v('tel')+
     (v('email')?'\nE-mail : '+v('email'):'')+
-    '\nCommune : '+v('commune')+'\nType de projet : '+v('type')+
+    '\nCommune : '+v('commune')+'\nType de projet : '+v('type')+(v('avancement')?'\nOù j\'en suis : '+v('avancement'):'')+
     '\n\nProjet :\n'+v('msg');
 }
 var PHOTOS=[];
@@ -613,7 +632,7 @@ document.getElementById('formDevis').addEventListener('submit',function(e){
   if(poids>4200000){note.textContent='Les fichiers joints sont trop lourds (4 Mo max au total). Retirez-en un ou envoyez-le par WhatsApp.';return;}
   btn.disabled=true;btn.textContent='Envoi…';
   fetch('/api/devis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-    nom:v('nom'),tel:v('tel'),email:v('email'),commune:v('commune'),type:v('type'),msg:v('msg'),
+    nom:v('nom'),tel:v('tel'),email:v('email'),commune:v('commune'),type:v('type'),avancement:v('avancement'),msg:v('msg'),
     estimation:((v('msg').match(/Estimation obtenue sur le site\s*:\s*(.+)/)||[])[1]||'').trim(),
     photos:PHOTOS})})
   .then(function(r){if(!r.ok)return r.text().then(function(t){throw t;});

@@ -54,7 +54,7 @@ section{padding:clamp(3.2rem,8vw,6rem) 0}
 .bar.ouvert .burger span:nth-child(1){transform:translateY(8px) rotate(45deg)}
 .bar.ouvert .burger span:nth-child(2){opacity:0}
 .bar.ouvert .burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
-@media(max-width:1100px){
+@media(max-width:1180px){
  .burger{display:flex}
  .bar .mark{margin-right:auto}
  .bar nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;background:#fff;border-bottom:3px solid var(--lime);box-shadow:0 12px 24px rgba(0,0,0,.12);padding:.4rem 0}
@@ -297,6 +297,7 @@ footer a:hover{color:var(--lime)}
 .liens-legaux{grid-column:1/-1;font-size:.85rem;margin-top:.6rem}
 .liens-legaux a{color:#8FA0BE;margin-right:1.2rem}
 .simu{padding-top:calc(clamp(3.2rem,8vw,6rem) + 30px)}.h1simu{font-size:clamp(2rem,5vw,3.2rem);margin:0}
+@media(min-width:1181px) and (max-width:1300px){.bar nav{gap:.7rem;font-size:.94rem}.mark{font-size:1.3rem}}
 </style>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -310,7 +311,7 @@ footer a:hover{color:var(--lime)}
     <nav>
       <a href="/simulateur.html" aria-current="page">Estimer mon budget</a>
       <a href="/qui-sommes-nous.html">Qui sommes-nous</a>
-      <a href="/#methode">Méthode</a>
+      <a href="/accompagnement.html">Accompagnement</a>
       <a href="/#realisations">Réalisations</a>
       <a href="/zone-intervention.html">Zone d'intervention</a>
       <a href="/avis.html">Avis clients</a>
@@ -393,8 +394,15 @@ footer a:hover{color:var(--lime)}
         <label class="opt"><input type="checkbox" id="littoral"> Zone littorale (traitement anticorrosion renforcé)</label>
         <label class="opt"><input type="checkbox" id="hauteur"> Travaux en hauteur (étage, toiture)</label>
         <label class="opt"><input type="checkbox" id="gravats"> Évacuation des gravats et déblais</label>
-        <label class="opt"><input type="checkbox" id="etude"> Étude béton armé / plans d'exécution</label>
         <label class="opt"><input type="checkbox" id="engin"> Location d'engin (pelle, grue) incluse</label>
+      </div>
+      <div class="champ">
+        <label style="margin-bottom:.3rem">Plans, permis et études <span style="font-weight:400;opacity:.75">(si vous n'avez pas encore de dossier)</span></label>
+        <label class="opt"><input type="checkbox" class="adm" id="adm_plans"> Plans de la maison (dessinateur / architecte partenaire)</label>
+        <label class="opt"><input type="checkbox" class="adm" id="adm_permis"> Dossier de permis de construire + attestation RTG</label>
+        <label class="opt"><input type="checkbox" class="adm" id="adm_sol"> Étude de sol G2</label>
+        <label class="opt"><input type="checkbox" class="adm" id="adm_ba"> Étude béton armé (plans d'exécution)</label>
+        <a href="/accompagnement.html" style="color:var(--lime);font-size:.9rem">Voir nos forfaits d'accompagnement →</a>
       </div>
       <div class="resultat">
         <div class="lbl">Estimation indicative, TTC (TVA 8,5 %)</div>
@@ -439,6 +447,12 @@ footer a:hover{color:var(--lime)}
           <option>Maison individuelle / bungalow</option><option>Clôture</option><option>Piscine</option>
           <option>Chemin d'accès / terrassement</option><option>Rénovation tous corps d'état</option>
           <option>Réparation béton armé</option><option>Mur de soutènement / démolition / assainissement</option><option>Autre</option>
+        </select>
+      </div>
+      <div><label for="avancement">Où en êtes-vous ?</label>
+        <select id="avancement">
+          <option value="">— Choisir —</option><option>Je cherche un terrain</option><option>J'ai un terrain, sans plans</option>
+          <option>J'ai des plans, pas encore de permis</option><option>J'ai mon permis de construire</option><option>Travaux sur une maison existante</option>
         </select>
       </div>
       <div><label for="msg">Votre projet</label><textarea id="msg" placeholder="Surface, longueur, délai souhaité, contraintes d'accès…"></textarea></div>
@@ -511,6 +525,9 @@ if ('IntersectionObserver' in window){
 } else { document.querySelectorAll('.rev').forEach(function(el){el.classList.add('vu');}); }
 
 /* ===== ESTIMATEUR — barème modifiable ici (prix TTC, TVA 8,5 % incluse) ===== */
+/* Forfaits démarches et études — prix TTC « à partir de / jusqu'à » */
+var ADMIN={adm_plans:[1500,3000,'Plans de la maison'],adm_permis:[1200,2400,'Permis de construire + RTG'],
+  adm_sol:[1500,3000,'Étude de sol G2'],adm_ba:[1500,2500,'Étude béton armé']};
 var BAREME={
  rigide:{nom:"Clôture rigide posée",unite:"ml",min:5,max:200,def:40,bas:75,haut:95,postes:["Semelles et poteaux béton","Panneaux rigides fournis et posés"]},
  muret:{nom:"Muret béton + pare-vue",unite:"ml",min:5,max:120,def:30,bas:380,haut:520,postes:["Semelle filante BA + agglos 20","Chaînages et enduit taloché","Poteaux et panneaux pare-vue"]},
@@ -548,7 +565,7 @@ var elProjet=document.getElementById('projet'),elQte=document.getElementById('qt
     elFinition=document.getElementById('finition'),elPente=document.getElementById('pente'),
     elUrgent=document.getElementById('urgent'),elLittoral=document.getElementById('littoral'),
     elHauteur=document.getElementById('hauteur'),elMode=document.getElementById('mode'),
-    elGravats=document.getElementById('gravats'),elEtude=document.getElementById('etude'),elEngin=document.getElementById('engin');
+    elGravats=document.getElementById('gravats'),elEngin=document.getElementById('engin');
 function euro(n){return Math.round(n/50)*50;}
 function fmt(n){return n.toLocaleString('fr-FR');}
 function calculer(){
@@ -561,7 +578,6 @@ function calculer(){
     {el:elLittoral, pct:10, label:"Zone littorale"},
     {el:elHauteur, pct:10, label:"Travaux en hauteur"},
     {el:elGravats, pct:5, label:"Évacuation des gravats"},
-    {el:elEtude, pct:4, label:"Étude béton armé / plans"},
     {el:elEngin, pct:6, label:"Location d'engin incluse"}
   ];
   var lignesMajo=[];
@@ -576,7 +592,10 @@ function calculer(){
     k*=finitionVal;
     lignesMajo.push('<li><span>Finition '+elFinition.options[elFinition.selectedIndex].text.toLowerCase()+'</span><span>'+(pctFinition>0?'+':'')+pctFinition+' %</span></li>');
   }
-  elMontant.innerHTML=fmt(euro(b.bas*q*k))+' – '+fmt(euro(b.haut*q*k))+' <span>€</span>';
+  var admB=0,admH=0;
+  Object.keys(ADMIN).forEach(function(id){var c=document.getElementById(id),a=ADMIN[id];
+    if(c&&c.checked){admB+=a[0];admH+=a[1];lignesMajo.push('<li><span>'+a[2]+'</span><span>+ '+fmt(a[0])+' – '+fmt(a[1])+' €</span></li>');}});
+  elMontant.innerHTML=fmt(euro(b.bas*q*k)+admB)+' – '+fmt(euro(b.haut*q*k)+admH)+' <span>€</span>';
   elVal.textContent=q+' '+b.unite;
   elLbl.textContent=(b.unite==='ml')?'Longueur':(b.unite==='m²'?'Surface':'Quantité');
   var dl=DELAI[elProjet.value]||[5,.5],j=Math.ceil(dl[0]+dl[1]*q),j2=Math.ceil(j*1.3);
@@ -587,7 +606,7 @@ function calculer(){
 }
 function changerProjet(){var b=BAREME[elProjet.value];elQte.min=b.min;elQte.max=b.max;elQte.value=b.def;calculer();}
 elProjet.addEventListener('change',changerProjet);
-[elQte,elAcces,elDemo,elFinition,elPente,elUrgent,elLittoral,elHauteur,elMode,elGravats,elEtude,elEngin].forEach(function(e){e.addEventListener('input',calculer);e.addEventListener('change',calculer);});
+[elQte,elAcces,elDemo,elFinition,elPente,elUrgent,elLittoral,elHauteur,elMode,elGravats,elEngin].concat([].slice.call(document.querySelectorAll('.adm'))).forEach(function(e){e.addEventListener('input',calculer);e.addEventListener('change',calculer);});
 changerProjet();
 
 var CORRESPONDANCE={
@@ -608,7 +627,7 @@ document.getElementById('envoyerEstim').addEventListener('click',function(){
   document.getElementById('msg').value=b.nom+' — '+elQte.value+' '+b.unite+' — finition '+finitionTxt+
     (elAcces.checked?'\nAccès difficile':'')+(elDemo.checked?'\nDépose de l\'existant à prévoir':'')+
     (elPente.checked?'\nTerrain en pente':'')+(elUrgent.checked?'\nDémarrage rapide souhaité':'')+
-    (elLittoral.checked?'\nZone littorale':'')+(elHauteur.checked?'\nTravaux en hauteur':'')+(elGravats.checked?'\nÉvacuation des gravats':'')+(elEtude.checked?'\nÉtude béton armé / plans':'')+(elEngin.checked?'\nLocation d\'engin incluse':'')+(parseFloat(elMode.value)!==1?'\nMain d\'œuvre seule':'')+
+    (elLittoral.checked?'\nZone littorale':'')+(elHauteur.checked?'\nTravaux en hauteur':'')+(elGravats.checked?'\nÉvacuation des gravats':'')+Object.keys(ADMIN).filter(function(id){return document.getElementById(id).checked;}).map(function(id){return '\nÀ prévoir : '+ADMIN[id][2];}).join('')+(elEngin.checked?'\nLocation d\'engin incluse':'')+(parseFloat(elMode.value)!==1?'\nMain d\'œuvre seule':'')+
     '\nEstimation obtenue sur le site : '+elMontant.textContent.replace(/\s+/g,' ').trim();
   document.getElementById('devis').scrollIntoView({behavior:'smooth'});
   setTimeout(function(){document.getElementById('nom').focus();},700);
@@ -619,7 +638,7 @@ function texteDemande(){
   return 'Bonjour SL CONCEPT BTP, je souhaite un devis.\n'+
     'Nom : '+v('nom')+'\nTéléphone : '+v('tel')+
     (v('email')?'\nE-mail : '+v('email'):'')+
-    '\nCommune : '+v('commune')+'\nType de projet : '+v('type')+
+    '\nCommune : '+v('commune')+'\nType de projet : '+v('type')+(v('avancement')?'\nOù j\'en suis : '+v('avancement'):'')+
     '\n\nProjet :\n'+v('msg');
 }
 var PHOTOS=[];
@@ -657,7 +676,7 @@ document.getElementById('formDevis').addEventListener('submit',function(e){
   if(poids>4200000){note.textContent='Les fichiers joints sont trop lourds (4 Mo max au total). Retirez-en un ou envoyez-le par WhatsApp.';return;}
   btn.disabled=true;btn.textContent='Envoi…';
   fetch('/api/devis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-    nom:v('nom'),tel:v('tel'),email:v('email'),commune:v('commune'),type:v('type'),msg:v('msg'),
+    nom:v('nom'),tel:v('tel'),email:v('email'),commune:v('commune'),type:v('type'),avancement:v('avancement'),msg:v('msg'),
     estimation:((v('msg').match(/Estimation obtenue sur le site\s*:\s*(.+)/)||[])[1]||'').trim(),
     photos:PHOTOS})})
   .then(function(r){if(!r.ok)return r.text().then(function(t){throw t;});
