@@ -7,7 +7,7 @@
 <meta name="description" content="Simulateur gratuit : estimez en 30 secondes le prix de votre maison, piscine, clôture, dalle ou extension en Guadeloupe. Prix TTC réels, TVA DOM 8,5 % comprise.">
 <meta property="og:title" content="Simulateur prix construction Guadeloupe — SL CONCEPT BTP">
 <meta property="og:description" content="Estimez votre budget en 30 secondes : maison, piscine, clôture, dalle… Devis gratuit.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@500;600;700;800&family=Fira+Sans:wght@400;500;600&family=Yellowtail&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@ section{padding:clamp(3.2rem,8vw,6rem) 0}
 .bar{position:sticky;top:0;z-index:60;background:#fff;border-bottom:3px solid var(--lime);box-shadow:0 2px 14px rgba(0,0,0,.06)}
 .bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.65rem 0}
 .mark{white-space:nowrap;font-family:"Fira Sans Condensed";font-weight:800;font-size:1.45rem;text-decoration:none;color:var(--navy);letter-spacing:-.01em}
-.mark span{color:var(--vert)}
+.mark span{color:var(--vert)}.mark{display:inline-flex;align-items:center;gap:.55rem}.mark img{width:2.1rem;height:2.1rem;display:block}.flogo{width:3rem;height:3rem;display:block;margin-bottom:.7rem}@media(max-width:480px){.mark{font-size:1.05rem;gap:.4rem}.mark img{width:1.7rem;height:1.7rem}}@media(max-width:400px){.mark{font-size:.85rem;gap:.3rem}.mark img{width:1.4rem;height:1.4rem}.bar .tel{padding-left:.55rem;padding-right:.55rem;font-size:.85rem}.bar .wrap{gap:.5rem}}
 .bar nav{display:flex;gap:1.1rem;font-family:"Fira Sans Condensed";font-weight:600;font-size:1.02rem}
 .bar nav a{white-space:nowrap;text-decoration:none;color:var(--encre);padding-bottom:2px;border-bottom:2px solid transparent}
 .bar nav a:hover{color:var(--vert);border-color:var(--lime)}
@@ -307,7 +307,7 @@ footer a:hover{color:var(--lime)}
 
 <header class="bar" id="bar">
   <div class="wrap">
-    <a class="mark" href="/">SL CONCEPT <span>BTP</span></a>
+    <a class="mark" href="/"><img src="/img/logo.svg" alt="" width="34" height="34">SL CONCEPT <span>BTP</span></a>
     <nav>
       <a href="/simulateur.html" aria-current="page">Estimer mon budget</a>
       <a href="/qui-sommes-nous.html">Qui sommes-nous</a>
@@ -482,7 +482,7 @@ footer a:hover{color:var(--lime)}
 <footer>
   <div class="wrap">
     <div>
-      <h4>SL CONCEPT BTP</h4>
+      <img class="flogo" src="/img/logo-sombre.svg" alt="" width="48" height="48"><h4>SL CONCEPT BTP</h4>
       <p>Spécialiste du gros œuvre en Guadeloupe : maison individuelle, bungalow, piscine, clôture, chemin d'accès et tous corps d'état.</p>
       <p style="margin-top:.8rem">Chemin de la Manioquerie<br>97116 Pointe-Noire, Guadeloupe</p>
     </div>
